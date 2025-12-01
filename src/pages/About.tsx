@@ -91,15 +91,19 @@ const About = () => {
                 <p className="text-muted-foreground leading-relaxed mb-4">
                   The town of{" "}
                   <span className="text-primary font-semibold">San Francisco</span>,
-                  located on Pacijan Island in the Camotes Sea, is a serene tropical
-                  destination known for its pristine beaches, crystal-clear waters,
-                  and warm local hospitality.
+                  is the largest and most vibrant municipality on the Camotes Islands, located east of Cebu in the Philippines. Known for its pristine white-sand beaches, turquoise waters, picturesque caves, and serene natural destinations, San Francisco combines tropical beauty with a laid-back, welcoming island atmosphere. It is the main tourism hub of Camotes and the gateway to many of the island’s best attractions.
                 </p>
 
                 <p className="text-muted-foreground leading-relaxed mb-4">
-                  As the largest and most vibrant municipality in the Camotes, it
-                  offers a rich mix of attractions—from beaches and caves to lakes,
-                  viewpoints, and local communities.
+                  San Francisco offers a balance of adventure, relaxation, and local culture. Visitors will find cozy resorts, friendly communities, and untouched natural scenery. The town is known for its clean surroundings, largely due to the award-winning environmental initiative called Purok System, which promotes strong community cooperation in keeping the environment clean.
+                </p>
+
+                <p className="text-muted-foreground leading-relaxed mb-4">
+                  The municipality of San Francisco is situated east of the main island of Cebu. It primarily occupies Pacijan Island and the smaller Tulang Island to the north. A Spanish-era causeway connects Pacijan to the nearby Poro Island. The total land area covers around 10,600 hectares.
+                </p>
+
+                <p className="text-muted-foreground leading-relaxed mb-4">
+                  Expect quiet roads, coconut-lined landscapes, and a refreshing escape from city life.
                 </p>
 
                 <p className="text-muted-foreground leading-relaxed">

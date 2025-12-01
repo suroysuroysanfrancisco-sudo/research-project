@@ -5,17 +5,17 @@ import "photo-sphere-viewer/dist/photo-sphere-viewer.css";
 interface Viewer360Props {
   imageUrl: string;
   title?: string;
-  height?: string;
+  className?: string; // ⭐ ADD THIS
 }
 
-export const Viewer360 = ({ imageUrl, title, height = "600px" }: Viewer360Props) => {
+export const Viewer360 = ({ imageUrl, title, className = "" }: Viewer360Props) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const viewerRef = useRef<Viewer | null>(null);
 
   useEffect(() => {
     if (!containerRef.current) return;
 
-    // Destroy previous instance
+    // Destroy any existing viewer
     viewerRef.current?.destroy();
 
     viewerRef.current = new Viewer({
@@ -24,11 +24,7 @@ export const Viewer360 = ({ imageUrl, title, height = "600px" }: Viewer360Props)
       caption: title ?? "",
       touchmoveTwoFingers: true,
       defaultZoomLvl: 0,
-      navbar: [
-        "autorotate",
-        "zoom",
-        "fullscreen",
-      ],
+      navbar: ["autorotate", "zoom", "fullscreen"],
     });
 
     return () => {
@@ -39,8 +35,7 @@ export const Viewer360 = ({ imageUrl, title, height = "600px" }: Viewer360Props)
   return (
     <div
       ref={containerRef}
-      className="w-full rounded-lg overflow-hidden shadow-large"
-      style={{ height }}
+      className={`w-full rounded-lg overflow-hidden shadow-large ${className}`}
     />
   );
 };

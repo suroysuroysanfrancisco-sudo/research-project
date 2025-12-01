@@ -32,7 +32,7 @@ const DestinationSingle = () => {
           </motion.h1>
 
           <p className="text-lg text-muted-foreground text-center mb-10">
-            {data.longDescription || data.description}
+            {data.shortDescription}
           </p>
 
           {/* 360 Viewer */}
@@ -51,7 +51,7 @@ const DestinationSingle = () => {
                 </h2>
 
                 <p className="text-muted-foreground leading-relaxed">
-                  {data.longDescription || data.shortDescription}
+                  {data.longDescription}
                 </p>
 
                 {/* You can add MORE details here */}
@@ -60,34 +60,35 @@ const DestinationSingle = () => {
                   <li>Popular tourist spot in Camotes</li>
                   <li>Clear turquoise waters and white sand</li>
                 </ul>
+                 {/* Address */}
+                  <div className="bg-muted/40 rounded-lg p-6 shadow-medium mb-10">
+                    <h3 className="text-xl font-semibold text-foreground mb-3">
+                      Address
+                    </h3>
+                    <p className="text-muted-foreground">{data.address}</p>
+                  </div>
+                  {/* Map */}
+                    <div className="rounded-lg overflow-hidden shadow-medium">
+                      <iframe
+                        src={data.mapEmbed}
+                        className="w-full h-[350px] rounded-lg"
+                        style={{ border: 0 }}
+                        allowFullScreen
+                        loading="lazy"
+                      ></iframe>
+                    </div>
               </div>
 
               {/* RIGHT COLUMN — 360 VIEWER */}
               <div>
-                <Viewer360 imageUrl={data.image} title={data.title} />
+                <Viewer360 imageUrl={data.image} title={data.title}  className="h-[250px] md:h-[400px] lg:h-[600px] xl:h-[800px]"/>
               </div>
-
             </div>
           </motion.div>
 
-          {/* Address */}
-          <div className="bg-muted/40 rounded-lg p-6 shadow-medium mb-10">
-            <h3 className="text-xl font-semibold text-foreground mb-3">
-              Address
-            </h3>
-            <p className="text-muted-foreground">{data.address}</p>
-          </div>
+         
 
-          {/* Map */}
-          <div className="rounded-lg overflow-hidden shadow-medium">
-            <iframe
-              src={data.mapEmbed}
-              className="w-full h-[350px] rounded-lg"
-              style={{ border: 0 }}
-              allowFullScreen
-              loading="lazy"
-            ></iframe>
-          </div>
+          
         </div>
       </div>
 
