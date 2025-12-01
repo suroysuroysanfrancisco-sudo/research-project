@@ -3,6 +3,7 @@ import { Footer } from "@/components/Footer";
 import { Viewer360 } from "@/components/Viewer360";
 import { motion } from "framer-motion";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Helmet } from "react-helmet-async";
 
 const VirtualTours = () => {
   // For demo purposes, using regular images. Replace with actual 360° images
@@ -29,6 +30,9 @@ const VirtualTours = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <Helmet>
+        <title>Virtual Tours | San Francisco - Discover Paradise in Cebu</title>
+      </Helmet>
       <Navigation />
 
       <div className="pt-32 pb-20 px-4">

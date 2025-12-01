@@ -42,7 +42,6 @@ const About = () => {
 
   return (
     <>
-      {/* Dynamic Page Title */}
       <Helmet>
         <title>About | San Francisco - Discover Paradise in Cebu</title>
       </Helmet>

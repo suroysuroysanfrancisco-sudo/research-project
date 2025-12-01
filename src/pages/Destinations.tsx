@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import santiagoBay from "@/assets/santiago-bay.jpg";
 import timboCave from "@/assets/timubo-cave.jpg";
 import lakeDanao from "@/assets/lake-danao.jpg";
+import { Helmet } from "react-helmet-async";
 
 const Destinations = () => {
   const destinations = [
@@ -66,6 +67,9 @@ const Destinations = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <Helmet>
+        <title>Destinations | San Francisco - Discover Paradise in Cebu</title>
+      </Helmet>
       <Navigation />
 
       <div className="pt-32 pb-20 px-4">

@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { MapPin, Phone, Mail } from "lucide-react";
 import { toast } from "sonner";
+import { Helmet } from "react-helmet-async";
 
 const Contact = () => {
   const handleSubmit = (e: React.FormEvent) => {
@@ -34,6 +35,9 @@ const Contact = () => {
 
   return (
     <div className="min-h-screen bg-background">
+    <Helmet>
+      <title>Contact Us | San Francisco - Discover Paradise in Cebu</title>
+    </Helmet>
       <Navigation />
 
       <div className="pt-32 pb-20 px-4">
