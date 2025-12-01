@@ -8,6 +8,7 @@ import heroImage from "@/assets/hero-camotes.jpg";
 import santiagoBay from "@/assets/santiago-bay.jpg";
 import timboCave from "@/assets/timubo-cave.jpg";
 import lakeDanao from "@/assets/lake-danao.jpg";
+import { Helmet } from "react-helmet-async";
 
 const Index = () => {
   const destinations = [
@@ -33,6 +34,9 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
+       <Helmet>
+        <title>San Francisco - Discover Paradise in Cebu</title>
+       </Helmet>
       <Navigation />
 
       {/* Hero Section */}
