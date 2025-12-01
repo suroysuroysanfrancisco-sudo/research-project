@@ -54,7 +54,7 @@ const Index = () => {
           <div className="absolute inset-0 bg-gradient-to-b from-black/50 to-transparent" />
         </div>
 
-        <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
+        <div className="relative z-10 text-center px-4 mx-auto">
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -169,7 +169,7 @@ const Index = () => {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="flex justify-center"
           >
-            <div className="w-full max-w-4xl drop-shadow-2xl">
+            <div className="w-full drop-shadow-2xl">
               <iframe
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d62736.24774738796!2d124.2873412525624!3d10.655904658210611!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x33a8329e7c298aed%3A0x6260721f703d69a!2sSan%20Francisco%2C%20Cebu!5e0!3m2!1sen!2sph!4v1764552173539!5m2!1sen!2sph"
                 className="w-full h-[450px] rounded-xl"
