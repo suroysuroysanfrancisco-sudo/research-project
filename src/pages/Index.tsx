@@ -8,6 +8,7 @@ import heroImage from "@/assets/hero-camotes.jpg";
 import santiagoBay from "@/assets/santiago-bay.jpg";
 import timboCave from "@/assets/timubo-cave.jpg";
 import lakeDanao from "@/assets/lake-danao.jpg";
+import MapSVG from "@/assets/map.svg?react";
 
 const Index = () => {
   const destinations = [
@@ -43,7 +44,7 @@ const Index = () => {
             alt="Camotes Island Paradise"
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-hero" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/50 to-transparent" />
         </div>
 
         <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
@@ -61,8 +62,7 @@ const Index = () => {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="text-xl md:text-2xl text-white/90 mb-8 leading-relaxed"
           >
-            Experience the pristine beaches, crystal caves, and natural wonders of Camotes Island
-            through immersive virtual tours
+            Experience the pristine beaches, crystal caves, and natural wonders of the town of San Francisco, Camotes, through immersive virtual tours.
           </motion.p>
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -72,7 +72,7 @@ const Index = () => {
           >
             <Button
               size="lg"
-              className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-lg px-8 py-6 shadow-large"
+              className="bg-primary hover:text-foreground text-primary-foreground font-semibold text-lg px-8 py-6 shadow-large"
               onClick={() => document.getElementById("destinations")?.scrollIntoView({ behavior: "smooth" })}
             >
               Explore Destinations
@@ -80,7 +80,7 @@ const Index = () => {
             <Button
               size="lg"
               variant="outline"
-              className="border-2 border-white text-white hover:bg-white hover:text-foreground font-semibold text-lg px-8 py-6 shadow-large"
+              className="border-2 text-primary border-white hover:bg-white hover:text-foreground font-semibold text-lg px-8 py-6 shadow-large"
               onClick={() => window.location.href = "/virtual-tours"}
             >
               Virtual Tours
@@ -116,7 +116,7 @@ const Index = () => {
               Featured Destinations
             </h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Explore the most breathtaking locations Camotes Island has to offer
+              Explore the most breathtaking locations San Francisco, Camotes has to offer
             </p>
           </motion.div>
 
@@ -129,6 +129,41 @@ const Index = () => {
               />
             ))}
           </div>
+        </div>
+      </section>
+      
+      {/* Map Section */}
+      <section id="map" className="py-20 px-4 bg-muted/30">
+        <div className="container mx-auto max-w-5xl text-center">
+          <motion.h2
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-4xl md:text-5xl font-bold font-playfair text-foreground mb-8"
+          >
+            Explore the Map
+          </motion.h2>
+
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="text-lg text-muted-foreground max-w-2xl mx-auto mb-12"
+          >
+            Discover San Francisco’s landmarks, beaches, lakes, and caves through our interactive map.
+          </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="flex justify-center"
+          >
+            <MapSVG className="w-full max-w-4xl drop-shadow-2xl" />
+          </motion.div>
         </div>
       </section>
 
@@ -145,7 +180,7 @@ const Index = () => {
               Ready to Explore?
             </h2>
             <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
-              Start your virtual journey through Camotes Island's most stunning locations
+              Start your virtual journey through San Franciscom Camotes' stunning locations
             </p>
             <Button
               size="lg"

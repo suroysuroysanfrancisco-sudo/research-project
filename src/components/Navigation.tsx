@@ -17,9 +17,9 @@ export const Navigation = () => {
 
   const navLinks = [
     { to: "/", label: "Home" },
+    { to: "/about", label: "About" },
     { to: "/destinations", label: "Destinations" },
     { to: "/virtual-tours", label: "Virtual Tours" },
-    { to: "/about", label: "About" },
     { to: "/contact", label: "Contact" },
   ];
 
@@ -27,8 +27,8 @@ export const Navigation = () => {
     <motion.nav
       initial={{ y: -100 }}
       animate={{ y: 0 }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled ? "bg-background/95 backdrop-blur-md shadow-medium" : "bg-transparent"
+      className={`fixed top-0 left-0 right-0 z-50 backdrop-blur-sm transition-all duration-300 ${
+        isScrolled ? "bg-background/95 backdrop-blur-md shadow-medium" : "bg-white/80"
       }`}
     >
       <div className="container mx-auto px-4">
@@ -37,7 +37,7 @@ export const Navigation = () => {
           <NavLink to="/" className="flex items-center space-x-2">
             <div className="text-2xl font-bold font-playfair">
               <span className="text-primary">Camotes</span>
-              <span className={isScrolled ? "text-foreground" : "text-white"}>Island</span>
+              <span className={isScrolled ? "text-foreground" : "text-foreground"}>Island</span>
             </div>
           </NavLink>
 
@@ -48,7 +48,7 @@ export const Navigation = () => {
                 key={link.to}
                 to={link.to}
                 className={`font-medium transition-colors ${
-                  isScrolled ? "text-foreground hover:text-primary" : "text-white hover:text-sand"
+                  isScrolled ? "text-foreground hover:text-foreground" : "text-foreground hover:text-primary"
                 }`}
                 activeClassName="text-primary font-semibold"
               >

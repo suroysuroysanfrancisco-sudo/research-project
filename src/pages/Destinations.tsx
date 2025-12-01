@@ -9,7 +9,7 @@ import lakeDanao from "@/assets/lake-danao.jpg";
 const Destinations = () => {
   const destinations = [
     {
-      title: "Santiago Bay",
+      title: "Santiago White Beach",
       description: "Pristine white sand beach with crystal-clear turquoise waters, perfect for swimming, snorkeling, and beach activities.",
       image: santiagoBay,
       link: "/destinations/santiago-bay",
@@ -21,7 +21,43 @@ const Destinations = () => {
       link: "/destinations/timubo-cave",
     },
     {
-      title: "Lake Danao",
+      title: "Lake Danao Park",
+      description: "A serene guitar-shaped lake surrounded by lush forest, offering kayaking, paddle boarding, and peaceful nature walks.",
+      image: lakeDanao,
+      link: "/destinations/lake-danao",
+    },
+    {
+      title: "Himensulan White Sand",
+      description: "Pristine white sand beach with crystal-clear turquoise waters, perfect for swimming, snorkeling, and beach activities.",
+      image: santiagoBay,
+      link: "/destinations/santiago-bay",
+    },
+    {
+      title: "Camotes Tourist Inn",
+      description: "A mystical cave featuring a natural lagoon inside with stunning stalactites and crystal-clear waters for swimming.",
+      image: timboCave,
+      link: "/destinations/timubo-cave",
+    },
+    {
+      title: "Mangodlong Rock Resort",
+      description: "A serene guitar-shaped lake surrounded by lush forest, offering kayaking, paddle boarding, and peaceful nature walks.",
+      image: lakeDanao,
+      link: "/destinations/lake-danao",
+    },
+    {
+      title: "Amazing Island Cave",
+      description: "Pristine white sand beach with crystal-clear turquoise waters, perfect for swimming, snorkeling, and beach activities.",
+      image: santiagoBay,
+      link: "/destinations/santiago-bay",
+    },
+    {
+      title: "Paraiso Cave",
+      description: "A mystical cave featuring a natural lagoon inside with stunning stalactites and crystal-clear waters for swimming.",
+      image: timboCave,
+      link: "/destinations/timubo-cave",
+    },
+    {
+      title: "Lizzies Cavern Cave",
       description: "A serene guitar-shaped lake surrounded by lush forest, offering kayaking, paddle boarding, and peaceful nature walks.",
       image: lakeDanao,
       link: "/destinations/lake-danao",

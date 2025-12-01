@@ -11,19 +11,19 @@ const VirtualTours = () => {
       id: "santiago",
       title: "Santiago Bay 360° Tour",
       description: "Experience the pristine white sand beach and crystal-clear waters",
-      image: "/placeholder.svg", // Replace with actual 360° image
+      image: "/santiago-bay.jpg", // Replace with actual 360° image
     },
     {
       id: "timubo",
       title: "Timubo Cave 360° Tour",
       description: "Explore the mystical cave with its natural lagoon",
-      image: "/placeholder.svg", // Replace with actual 360° image
+      image: "/timubo-cave.jpg", // Replace with actual 360° image
     },
     {
       id: "danao",
       title: "Lake Danao 360° Tour",
       description: "Navigate the serene guitar-shaped lake",
-      image: "/placeholder.svg", // Replace with actual 360° image
+      image: "/lake-danao.jpg", // Replace with actual 360° image
     },
   ];
 
