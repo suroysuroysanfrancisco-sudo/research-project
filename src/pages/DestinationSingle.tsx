@@ -21,7 +21,7 @@ const DestinationSingle = () => {
       <Navigation />
 
       <div className="pt-32 pb-20 px-4">
-        <div className="container mx-auto max-w-4xl">
+        <div className="container mx-auto">
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
