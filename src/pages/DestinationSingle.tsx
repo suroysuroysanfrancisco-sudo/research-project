@@ -1,3 +1,4 @@
+import { destinations } from "@/data/destinations";
 import { useParams } from "react-router-dom";
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
@@ -5,40 +6,9 @@ import { Viewer360 } from "@/components/Viewer360";
 import { motion } from "framer-motion";
 import { Helmet } from "react-helmet-async";
 
-// Your destination data
-const destinations = {
-  "santiago-bay": {
-    title: "Santiago Bay",
-    description:
-      "Pristine white sand beach with crystal-clear turquoise waters, perfect for swimming and relaxation.",
-    address: "Santiago, San Francisco, Camotes Island, Cebu",
-    image: "/santiago-bay.jpg", // 360° image here
-    mapEmbed:
-      "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d...",
-  },
-  "timubo-cave": {
-    title: "Timubo Cave",
-    description:
-      "A mystical cave with a natural lagoon and beautiful rock formations.",
-    address: "Barangay Sonog, San Francisco, Camotes Island, Cebu",
-    image: "/timubo-cave.jpg", // 360° image
-    mapEmbed:
-      "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!...",
-  },
-  "lake-danao": {
-    title: "Lake Danao",
-    description:
-      "A serene guitar-shaped lake surrounded by lush forest vegetation.",
-    address: "Lake Danao Park, San Francisco, Camotes Island, Cebu",
-    image: "/lake-danao.jpg",
-    mapEmbed:
-      "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!...",
-  },
-};
-
 const DestinationSingle = () => {
   const { id } = useParams();
-  const data = destinations[id];
+  const data = destinations.find((d) => d.id === id); // ✅ FIXED
 
   if (!data) return <div>Destination not found</div>;
 
@@ -62,7 +32,7 @@ const DestinationSingle = () => {
           </motion.h1>
 
           <p className="text-lg text-muted-foreground text-center mb-10">
-            {data.description}
+            {data.longDescription || data.description}
           </p>
 
           {/* 360 Viewer */}
