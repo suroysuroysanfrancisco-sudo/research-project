@@ -47,7 +47,7 @@ const VirtualTours = () => {
               Virtual Tours
             </h1>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Immerse yourself in 360° views of Camotes Island's most beautiful locations
+              Immerse yourself in 360° views of San Francisco's most beautiful locations
             </p>
           </motion.div>
 

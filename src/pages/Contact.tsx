@@ -19,7 +19,7 @@ const Contact = () => {
     {
       icon: MapPin,
       title: "Location",
-      content: "Camotes Island, Cebu, Philippines",
+      content: "San Francisco, Camotes, Cebu, Philippines",
     },
     {
       icon: Phone,
@@ -29,7 +29,7 @@ const Contact = () => {
     {
       icon: Mail,
       title: "Email",
-      content: "info@camotesisland.com",
+      content: "info@sanfrancisco.com",
     },
   ];
 
@@ -52,7 +52,7 @@ const Contact = () => {
               Get in Touch
             </h1>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Have questions about Camotes Island? We'd love to hear from you
+              Have questions about the Town of San Francisco? We'd love to hear from you
             </p>
           </motion.div>
 
@@ -146,7 +146,7 @@ const Contact = () => {
                   Visit Us
                 </h2>
                 <p className="text-muted-foreground leading-relaxed mb-4">
-                  Planning a trip to Camotes Island? Our tourism office can help you plan
+                  Planning a trip to San Francisco, Camotes? Our tourism office can help you plan
                   the perfect itinerary and provide information about local accommodations,
                   transportation, and activities.
                 </p>

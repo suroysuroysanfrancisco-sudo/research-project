@@ -39,7 +39,7 @@ export const Navigation = () => {
             <div className="flex items-center">
               <img
                 src={logo}
-                alt="Camotes Island Logo"
+                alt="Suroy-suroy San Francisco Logo"
                 className="h-[4.5rem] w-auto object-contain" // adjust size as needed
               />
             </div>

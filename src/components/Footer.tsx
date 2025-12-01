@@ -7,7 +7,7 @@ export const Footer = () => {
         <div className="grid md:grid-cols-3 gap-8">
           {/* About */}
           <div>
-            <h3 className="text-xl font-bold font-playfair mb-4">Camotes Island</h3>
+            <h3 className="text-xl font-bold font-playfair mb-4">San Francisco, Camotes</h3>
             <p className="text-white/90 leading-relaxed">
               Discover the hidden paradise of the Philippines. Experience pristine beaches,
               crystal caves, and natural wonders through our immersive virtual tours.
@@ -47,7 +47,7 @@ export const Footer = () => {
             <ul className="space-y-3">
               <li className="flex items-start space-x-3">
                 <MapPin className="w-5 h-5 mt-1 flex-shrink-0" />
-                <span className="text-white/90">Camotes Island, Cebu, Philippines</span>
+                <span className="text-white/90">San Francisco, Cebu, Philippines</span>
               </li>
               <li className="flex items-start space-x-3">
                 <Phone className="w-5 h-5 mt-1 flex-shrink-0" />
@@ -55,14 +55,14 @@ export const Footer = () => {
               </li>
               <li className="flex items-start space-x-3">
                 <Mail className="w-5 h-5 mt-1 flex-shrink-0" />
-                <span className="text-white/90">info@camotesisland.com</span>
+                <span className="text-white/90">info@sanfrancisco.com</span>
               </li>
             </ul>
           </div>
         </div>
 
         <div className="border-t border-white/20 mt-8 pt-8 text-center text-white/80">
-          <p>&copy; {new Date().getFullYear()} Camotes Island Tourism. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} Suroy-suroy San Francisco. All rights reserved.</p>
         </div>
       </div>
     </footer>

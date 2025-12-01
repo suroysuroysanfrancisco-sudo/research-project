@@ -84,7 +84,7 @@ const Destinations = () => {
               Explore Our Destinations
             </h1>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Discover the breathtaking natural wonders that make Camotes Island a hidden paradise
+              Discover the breathtaking natural wonders that make San Francisco, Camotes a hidden paradise
             </p>
           </motion.div>
 
