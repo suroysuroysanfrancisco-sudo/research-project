@@ -4,7 +4,8 @@ import { Footer } from "@/components/Footer";
 import { DestinationCard } from "@/components/DestinationCard";
 import { Button } from "@/components/ui/button";
 import { ChevronDown } from "lucide-react";
-import heroImage from "@/assets/hero-camotes.jpg";
+//import heroImage from "@/assets/hero-camotes.jpg";
+import heroVideo from "@/assets/hero-video.mp4";
 import santiagoBay from "@/assets/santiago-bay.jpg";
 import timboCave from "@/assets/timubo-cave.jpg";
 import lakeDanao from "@/assets/lake-danao.jpg";
@@ -42,11 +43,14 @@ const Index = () => {
       {/* Hero Section */}
       <section className="relative h-screen flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0">
-          <img
-            src={heroImage}
-            alt="Camotes Island Paradise"
+          <video
+            src={heroVideo}
+            autoPlay
+            muted
+            loop
+            playsInline
             className="w-full h-full object-cover"
-          />
+          ></video>
           <div className="absolute inset-0 bg-gradient-to-b from-black/50 to-transparent" />
         </div>
 
