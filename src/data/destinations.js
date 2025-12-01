@@ -38,4 +38,15 @@ export const destinations = [
     address: "Lake Danao Park, San Francisco, Camotes Island, Cebu",
     mapEmbed: "YOUR_MAP_EMBED_URL_HERE",
   },
+    {
+    id: "mangodlong-rock",
+    title: "Mangodlong Rock Resort",
+    shortDescription:
+      "Pristine white sand beach with crystal-clear turquoise waters.",
+    longDescription:
+      "Pristine white sand beach with crystal-clear turquoise waters, perfect for swimming, snorkeling, and beach activities.",
+    image: santiagoBay,
+    address: "Santiago, San Francisco, Camotes Island, Cebu",
+    mapEmbed: "YOUR_MAP_EMBED_URL_HERE",
+  },
 ];
