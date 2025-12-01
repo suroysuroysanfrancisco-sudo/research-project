@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { NavLink } from "./NavLink";
 import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import logo from "@/assets/San francisco tourist.svg";
 
 export const Navigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -35,9 +36,12 @@ export const Navigation = () => {
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
           <NavLink to="/" className="flex items-center space-x-2">
-            <div className="text-2xl font-bold font-playfair">
-              <span className="text-primary">Camotes</span>
-              <span className={isScrolled ? "text-foreground" : "text-foreground"}>Island</span>
+            <div className="flex items-center">
+              <img
+                src={logo}
+                alt="Camotes Island Logo"
+                className="h-10 w-auto object-contain" // adjust size as needed
+              />
             </div>
           </NavLink>
 
