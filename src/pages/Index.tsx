@@ -8,7 +8,6 @@ import heroImage from "@/assets/hero-camotes.jpg";
 import santiagoBay from "@/assets/santiago-bay.jpg";
 import timboCave from "@/assets/timubo-cave.jpg";
 import lakeDanao from "@/assets/lake-danao.jpg";
-import MapSVG from "@/assets/map.svg?react";
 
 const Index = () => {
   const destinations = [
@@ -162,10 +161,20 @@ const Index = () => {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="flex justify-center"
           >
-            <MapSVG className="w-full max-w-4xl drop-shadow-2xl" />
+            <div className="w-full max-w-4xl drop-shadow-2xl">
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d62736.24774738796!2d124.2873412525624!3d10.655904658210611!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x33a8329e7c298aed%3A0x6260721f703d69a!2sSan%20Francisco%2C%20Cebu!5e0!3m2!1sen!2sph!4v1764552173539!5m2!1sen!2sph"
+                className="w-full h-[450px] rounded-xl"
+                style={{ border: 0 }}
+                allowFullScreen=""
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              ></iframe>
+            </div>
           </motion.div>
         </div>
       </section>
+
 
       {/* CTA Section */}
       <section className="py-20 bg-gradient-ocean">
