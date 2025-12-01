@@ -64,7 +64,7 @@ export const Navigation = () => {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className={`md:hidden p-2 ${isScrolled ? "text-foreground" : "text-white"}`}
+            className={`md:hidden p-2 ${isScrolled ? "text-foreground" : "text-foreground"}`}
             aria-label="Toggle menu"
           >
             {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
