@@ -89,7 +89,7 @@ const DestinationSingle = () => {
               src={data.mapEmbed}
               className="w-full h-[350px] rounded-lg"
               style={{ border: 0 }}
-              allowFullScreen=""
+              allowFullScreen
               loading="lazy"
             ></iframe>
           </div>
