@@ -42,7 +42,32 @@ const DestinationSingle = () => {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="bg-card rounded-lg p-6 shadow-medium mb-10"
           >
-            <Viewer360 imageUrl={data.image} title={data.title} />
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+
+              {/* LEFT COLUMN — DESCRIPTION */}
+              <div className="space-y-4">
+                <h2 className="text-2xl font-bold font-playfair text-foreground">
+                  About {data.title}
+                </h2>
+
+                <p className="text-muted-foreground leading-relaxed">
+                  {data.longDescription || data.shortDescription}
+                </p>
+
+                {/* You can add MORE details here */}
+                <ul className="list-disc pl-5 text-muted-foreground space-y-2">
+                  <li>Perfect for swimming and relaxation</li>
+                  <li>Popular tourist spot in Camotes</li>
+                  <li>Clear turquoise waters and white sand</li>
+                </ul>
+              </div>
+
+              {/* RIGHT COLUMN — 360 VIEWER */}
+              <div>
+                <Viewer360 imageUrl={data.image} title={data.title} />
+              </div>
+
+            </div>
           </motion.div>
 
           {/* Address */}
