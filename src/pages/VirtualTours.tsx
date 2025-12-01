@@ -2,10 +2,18 @@ import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
 import { motion } from "framer-motion";
 import { Helmet } from "react-helmet-async";
-import { destinations } from "@/data/destinations"; // using your dynamic destinations data
+import { fetchDestinations } from "@/data/destinations"; // now uses Supabase
 import townMap from "@/assets/san-francisco.png";
+import { useEffect, useState } from "react";
 
 const VirtualTours = () => {
+  const [destinations, setDestinations] = useState<any[]>([]);
+
+  // Load Supabase destinations on mount
+  useEffect(() => {
+    fetchDestinations().then((data) => setDestinations(data));
+  }, []);
+
   return (
     <div className="min-h-screen bg-background">
       <Helmet>
@@ -40,17 +48,17 @@ const VirtualTours = () => {
           >
             {/* Map Image */}
             <img
-              src={townMap}  // ← Replace with your actual map image
+              src={townMap}
               alt="San Francisco Map"
               className="w-full rounded-lg shadow-xl"
             />
 
             {/* Dynamic Map Hotspots */}
-            {destinations.map((spot) => (
-              spot.hotspot && (
+            {destinations.map((spot) =>
+              spot.hotspot?.top && spot.hotspot?.left ? (
                 <button
                   key={spot.id}
-                  onClick={() => window.location.href = `/destinations/${spot.id}`}
+                  onClick={() => (window.location.href = `/destinations/${spot.id}`)}
                   className="absolute bg-primary text-white px-3 py-1 rounded-full shadow-lg text-sm font-semibold hover:bg-primary/80 transition transform -translate-x-1/2 -translate-y-1/2"
                   style={{
                     top: spot.hotspot.top,
@@ -59,8 +67,8 @@ const VirtualTours = () => {
                 >
                   {spot.title}
                 </button>
-              )
-            ))}
+              ) : null
+            )}
           </motion.div>
 
           {/* Navigation Tips */}

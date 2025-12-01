@@ -1,22 +1,39 @@
+import { useEffect, useState } from "react";
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
 import { DestinationCard } from "@/components/DestinationCard";
 import { motion } from "framer-motion";
-import { destinations } from "@/data/destinations.js";
 import { Helmet } from "react-helmet-async";
-
+import { supabase } from "@/lib/supabase";
 
 const Destinations = () => {
+  const [destinations, setDestinations] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    loadDestinations();
+  }, []);
+
+  const loadDestinations = async () => {
+    const { data, error } = await supabase.from("destinations").select("*");
+
+    if (error) console.error(error);
+    else setDestinations(data || []);
+
+    setLoading(false);
+  };
 
   return (
     <div className="min-h-screen bg-background">
       <Helmet>
         <title>Destinations | San Francisco - Discover Paradise in Cebu</title>
       </Helmet>
+
       <Navigation />
 
       <div className="pt-32 pb-20 px-4">
-        <div className="container mx-auto">
+        <div className="container mx-auto max-w-6xl">
+
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -27,21 +44,27 @@ const Destinations = () => {
               Explore Our Destinations
             </h1>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Discover the breathtaking natural wonders that make San Francisco, Camotes a hidden paradise
+              Discover the breathtaking natural wonders that make San Francisco, Camotes a hidden paradise.
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {destinations.map((destination, index) => (
-              <DestinationCard
-                key={destination.id}
-                title={destination.title}
-                description={destination.shortDescription}
-                image={destination.image}
-                link={`/destinations/${destination.id}`}
-              />
-            ))}
-          </div>
+          {loading ? (
+            <p className="text-center text-muted-foreground">Loading...</p>
+          ) : (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {destinations.map((item, index) => (
+                <DestinationCard
+                  key={item.id}
+                  title={item.title}
+                  description={item.short_description}
+                  image={item.image_url} // image now comes from supabase storage
+                  link={`/destinations/${item.id}`}
+                  delay={index * 0.15}
+                />
+              ))}
+            </div>
+          )}
+
         </div>
       </div>
 
