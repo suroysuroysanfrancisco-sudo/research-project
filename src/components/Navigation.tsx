@@ -40,7 +40,7 @@ export const Navigation = () => {
               <img
                 src={logo}
                 alt="Camotes Island Logo"
-                className="h-10 w-auto object-contain" // adjust size as needed
+                className="h-[4.5rem] w-auto object-contain" // adjust size as needed
               />
             </div>
           </NavLink>
