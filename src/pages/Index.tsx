@@ -5,7 +5,7 @@ import { DestinationCard } from "@/components/DestinationCard";
 import { Button } from "@/components/ui/button";
 import { ChevronDown } from "lucide-react";
 //import heroImage from "@/assets/hero-camotes.jpg";
-import heroVideo from "@/assets/hero-video.mp4";
+import heroVideo from "@/assets/beach-waves.mp4";
 import santiagoBay from "@/assets/santiago-bay.jpg";
 import timboCave from "@/assets/timubo-cave.jpg";
 import lakeDanao from "@/assets/lake-danao.jpg";
