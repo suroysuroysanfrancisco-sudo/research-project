@@ -1,21 +1,24 @@
-import { supabase } from "./supabaseClient";
+// src/lib/uploadImage.ts
+import { supabase } from "./supabase";
 
 export async function uploadImage(file: File) {
   const fileExt = file.name.split(".").pop();
   const fileName = `${Date.now()}.${fileExt}`;
   const filePath = `destinations/${fileName}`;
 
-  // Upload to storage bucket
-  const { error } = await supabase.storage
-    .from("destinations")
-    .upload(filePath, file);
+  const { data, error } = await supabase.storage
+    .from("destinations") // bucket name
+    .upload(filePath, file, {
+      cacheControl: "3600",
+      upsert: false,
+    });
 
   if (error) throw error;
 
-  // Get the PUBLIC URL
-  const { data } = supabase.storage
+  // return PUBLIC URL
+  const { data: { publicUrl } } = supabase.storage
     .from("destinations")
     .getPublicUrl(filePath);
 
-  return data.publicUrl;
+  return publicUrl;
 }
