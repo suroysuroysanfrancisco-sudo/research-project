@@ -20,7 +20,7 @@ import AdminDestinations from "./pages/admin/AdminDestinations";
 import NewDestination from "./pages/admin/NewDestination";
 
 // AUTH WRAPPER
-import RequireAdmin from "@/components/RequireAdmin";
+import RequireAdmin from "@/components/auth/RequireAdmin";
 
 import { HelmetProvider } from "react-helmet-async";
 
