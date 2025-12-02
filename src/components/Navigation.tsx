@@ -45,7 +45,6 @@ export const Navigation = () => {
             </div>
           </NavLink>
 
-          {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
             {navLinks.map((link) => (
               <NavLink
@@ -61,7 +60,6 @@ export const Navigation = () => {
             ))}
           </div>
 
-          {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             className={`md:hidden p-2 ${isScrolled ? "text-foreground" : "text-foreground"}`}
@@ -72,7 +70,6 @@ export const Navigation = () => {
         </div>
       </div>
 
-      {/* Mobile Menu */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div

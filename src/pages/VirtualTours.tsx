@@ -2,14 +2,13 @@ import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
 import { motion } from "framer-motion";
 import { Helmet } from "react-helmet-async";
-import { fetchDestinations } from "@/data/destinations"; // now uses Supabase
+import { fetchDestinations } from "@/data/destinations";
 import townMap from "@/assets/san-francisco.png";
 import { useEffect, useState } from "react";
 
 const VirtualTours = () => {
   const [destinations, setDestinations] = useState<any[]>([]);
 
-  // Load Supabase destinations on mount
   useEffect(() => {
     fetchDestinations().then((data) => setDestinations(data));
   }, []);
@@ -24,7 +23,6 @@ const VirtualTours = () => {
 
       <div className="pt-32 pb-20 px-4">
         <div className="container mx-auto max-w-5xl">
-          {/* Page Title */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -38,22 +36,17 @@ const VirtualTours = () => {
               Select a location from the interactive map to explore its 360° virtual experience.
             </p>
           </motion.div>
-
-          {/* Interactive Map Section */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6, delay: 0.2 }}
             className="relative w-full max-w-4xl mx-auto"
           >
-            {/* Map Image */}
             <img
               src={townMap}
               alt="San Francisco Map"
               className="w-full rounded-lg shadow-xl"
             />
-
-            {/* Dynamic Map Hotspots */}
             {destinations.map((spot) =>
               spot.hotspot?.top && spot.hotspot?.left ? (
                 <button
@@ -70,8 +63,6 @@ const VirtualTours = () => {
               ) : null
             )}
           </motion.div>
-
-          {/* Navigation Tips */}
           <div className="bg-muted/50 rounded-lg p-6 mt-12 shadow-medium">
             <h3 className="text-lg font-semibold text-foreground mb-3">
               How to Use the Virtual Map

@@ -12,14 +12,12 @@ import About from "./pages/About";
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
 
-// ADMIN PAGES
 import AdminLogin from "./pages/admin/AdminLogin";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminDestinations from "./pages/admin/AdminDestinations";
 import NewDestination from "./pages/admin/NewDestination";
 import EditDestination from "./pages/admin/EditDestination";
 
-// AUTH WRAPPER
 import RequireAdmin from "@/components/RequireAdmin";
 
 import { HelmetProvider } from "react-helmet-async";
@@ -35,10 +33,6 @@ const App = () => (
 
         <BrowserRouter>
           <Routes>
-
-            {/* ============================
-                PUBLIC ROUTES
-            ============================ */}
             <Route path="/" element={<Index />} />
             <Route path="/about" element={<About />} />
             <Route path="/destinations" element={<Destinations />} />
@@ -46,14 +40,8 @@ const App = () => (
             <Route path="/virtual-tours" element={<VirtualTours />} />
             <Route path="/contact" element={<Contact />} />
 
-            {/* ============================
-                AUTH (UNPROTECTED)
-            ============================ */}
             <Route path="/admin/login" element={<AdminLogin />} />
 
-            {/* ============================
-                ADMIN (PROTECTED ROUTES)
-            ============================ */}
             <Route
               path="/admin"
               element={
@@ -90,9 +78,6 @@ const App = () => (
               }
             />
 
-            {/* ============================
-                404 CATCH-ALL
-            ============================ */}
             <Route path="*" element={<NotFound />} />
 
           </Routes>

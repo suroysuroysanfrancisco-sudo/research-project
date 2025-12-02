@@ -11,7 +11,6 @@ export default function AdminDashboard() {
 
   return (
     <AdminLayout>
-      {/* Top Bar */}
       <div className="flex justify-between items-center mb-10">
         <h1 className="text-4xl font-bold">Admin Dashboard</h1>
 
@@ -23,7 +22,6 @@ export default function AdminDashboard() {
         </button>
       </div>
 
-      {/* Content Grid */}
       <div className="grid md:grid-cols-3 gap-6 mt-6">
         <Link
           to="/admin/destinations"

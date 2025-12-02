@@ -13,9 +13,6 @@ export default function EditDestination() {
 
   const mapRef = useRef<HTMLDivElement | null>(null);
 
-  // ----------------------------------------
-  // LOAD DESTINATION
-  // ----------------------------------------
   useEffect(() => {
     async function load() {
       const { data, error } = await supabase
@@ -38,9 +35,6 @@ export default function EditDestination() {
 
   if (loading || !form) return <p className="p-10 text-lg">Loading...</p>;
 
-  // ----------------------------------------
-  // IMAGE UPLOAD
-  // ----------------------------------------
   const handleImageUpload = async (e: any) => {
     try {
       const file = e.target.files?.[0];
@@ -62,9 +56,6 @@ export default function EditDestination() {
     }
   };
 
-  // ----------------------------------------
-  // SAVE CHANGES
-  // ----------------------------------------
   const update = async () => {
     const { error } = await supabase
       .from("destinations")
@@ -84,9 +75,6 @@ export default function EditDestination() {
     else alert("Updated successfully!");
   };
 
-  // ----------------------------------------
-  // DRAG HOTSPOT (MAP)
-  // ----------------------------------------
   const handleHotspotDrag = (e: any) => {
     if (!mapRef.current) return;
 
@@ -94,7 +82,6 @@ export default function EditDestination() {
     let top = ((e.clientY - rect.top) / rect.height) * 100;
     let left = ((e.clientX - rect.left) / rect.width) * 100;
 
-    // Constrain inside map
     top = Math.min(98, Math.max(2, top));
     left = Math.min(98, Math.max(2, left));
 
@@ -110,9 +97,6 @@ export default function EditDestination() {
     <div className="p-10 max-w-4xl mx-auto">
       <h1 className="text-3xl font-bold mb-6">Edit Destination</h1>
 
-      {/* ---------------------------------- */}
-      {/* HOTSPOT MAP */}
-      {/* ---------------------------------- */}
       <div
         ref={mapRef}
         className="relative w-full max-w-2xl mb-10 mx-auto select-none"
@@ -133,9 +117,6 @@ export default function EditDestination() {
         </div>
       </div>
 
-      {/* ---------------------------------- */}
-      {/* IMAGE UPLOAD */}
-      {/* ---------------------------------- */}
       <label className="block mb-2 font-semibold">Destination Image</label>
       <input type="file" accept="image/*" onChange={handleImageUpload} />
 
@@ -151,9 +132,6 @@ export default function EditDestination() {
         />
       )}
 
-      {/* ---------------------------------- */}
-      {/* READ ONLY ID FIELD */}
-      {/* ---------------------------------- */}
       <label className="block mt-6 mb-2 font-semibold">Destination ID</label>
       <input
         readOnly
@@ -161,9 +139,6 @@ export default function EditDestination() {
         className="input w-full mb-6 bg-muted cursor-not-allowed"
       />
 
-      {/* ---------------------------------- */}
-      {/* FORM FIELDS */}
-      {/* ---------------------------------- */}
       <label className="block mb-2 font-semibold">Title</label>
       <input
         className="input w-full mb-4"

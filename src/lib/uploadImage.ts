@@ -7,7 +7,7 @@ export async function uploadImage(file: File) {
   const filePath = `destinations/${fileName}`;
 
   const { data, error } = await supabase.storage
-    .from("destinations") // bucket name
+    .from("destinations")
     .upload(filePath, file, {
       cacheControl: "3600",
       upsert: false,
@@ -15,7 +15,6 @@ export async function uploadImage(file: File) {
 
   if (error) throw error;
 
-  // return PUBLIC URL
   const { data: { publicUrl } } = supabase.storage
     .from("destinations")
     .getPublicUrl(filePath);

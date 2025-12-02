@@ -119,9 +119,6 @@ export default function NewDestination() {
     <div className="p-10 max-w-4xl mx-auto">
       <h1 className="text-3xl font-bold mb-6">Add New Destination</h1>
 
-      {/* --------------------------------------- */}
-      {/* HOTSPOT MAP */}
-      {/* --------------------------------------- */}
       <div
         ref={mapRef}
         className="relative w-full max-w-2xl mb-10 mx-auto select-none"
@@ -142,9 +139,6 @@ export default function NewDestination() {
         </div>
       </div>
 
-      {/* --------------------------------------- */}
-      {/* IMAGE UPLOAD */}
-      {/* --------------------------------------- */}
       <label className="block mb-2 font-semibold">Destination Image</label>
       <input type="file" accept="image/*" onChange={handleImageUpload} />
 
@@ -160,11 +154,6 @@ export default function NewDestination() {
         />
       )}
 
-      {/* --------------------------------------- */}
-      {/* FORM FIELDS */}
-      {/* --------------------------------------- */}
-
-      {/* Auto ID Field */}
       <label className="block mt-6 mb-2 font-semibold">Generated ID</label>
       <input
         className="input w-full mb-4 bg-muted cursor-not-allowed"
@@ -180,7 +169,7 @@ export default function NewDestination() {
           setForm({
             ...form,
             title: e.target.value,
-            id: slugify(e.target.value), // Auto-generate ID from title
+            id: slugify(e.target.value),
           })
         }
       />

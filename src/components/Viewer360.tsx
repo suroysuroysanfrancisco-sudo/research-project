@@ -5,7 +5,7 @@ import "photo-sphere-viewer/dist/photo-sphere-viewer.css";
 interface Viewer360Props {
   imageUrl: string;
   title?: string;
-  className?: string; // ⭐ ADD THIS
+  className?: string;
 }
 
 export const Viewer360 = ({ imageUrl, title, className = "" }: Viewer360Props) => {
@@ -15,7 +15,6 @@ export const Viewer360 = ({ imageUrl, title, className = "" }: Viewer360Props) =
   useEffect(() => {
     if (!containerRef.current) return;
 
-    // Destroy any existing viewer
     viewerRef.current?.destroy();
 
     viewerRef.current = new Viewer({

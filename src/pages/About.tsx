@@ -9,7 +9,6 @@ import { Helmet } from "react-helmet-async";
 const About = () => {
   const [offsetY, setOffsetY] = useState(0);
 
-  // Parallax scroll
   const handleScroll = () => {
     setOffsetY(window.scrollY * 0.3);
   };
@@ -66,14 +65,12 @@ const About = () => {
               </p>
             </motion.div>
 
-            {/* Image + Text */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
               className="grid lg:grid-cols-2 gap-12 items-center mb-16"
             >
-              {/* Image */}
               <div className="w-full h-[30rem] overflow-hidden rounded-lg shadow-medium group">
                 <img
                   src={aboutImage}
@@ -85,8 +82,6 @@ const About = () => {
                   }}
                 />
               </div>
-
-              {/* Text */}
               <div className="bg-card p-8 rounded-lg shadow-medium prose prose-lg max-w-none">
                 <p className="text-muted-foreground leading-relaxed mb-4">
                   The town of{" "}
@@ -112,8 +107,6 @@ const About = () => {
                 </p>
               </div>
             </motion.div>
-
-            {/* Features */}
             <div className="grid md:grid-cols-3 gap-8">
               {features.map((feature, index) => (
                 <motion.div

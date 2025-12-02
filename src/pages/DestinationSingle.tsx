@@ -58,8 +58,6 @@ const DestinationSingle = () => {
           <p className="text-lg text-muted-foreground text-center mb-10">
             {data.long_description}
           </p>
-
-          {/* 360 Viewer */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -68,14 +66,10 @@ const DestinationSingle = () => {
           >
             <Viewer360 imageUrl={data.image_url} title={data.title} />
           </motion.div>
-
-          {/* Address */}
           <div className="bg-muted/40 rounded-lg p-6 shadow-medium mb-10">
             <h3 className="text-xl font-semibold text-foreground mb-3">Address</h3>
             <p className="text-muted-foreground">{data.address}</p>
           </div>
-
-          {/* Map */}
           <div className="rounded-lg overflow-hidden shadow-medium">
             <iframe
               src={data.map_embed}
