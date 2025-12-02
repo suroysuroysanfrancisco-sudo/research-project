@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { supabase } from "@/lib/supabase";
+import AdminLayout from "@/components/AdminLayout";
 import { uploadImage } from "@/lib/uploadImage";
 import { useParams } from "react-router-dom";
 import townMap from "@/assets/san-francisco.png";
@@ -105,6 +106,7 @@ export default function EditDestination() {
   };
 
   return (
+         <AdminLayout>
     <div className="p-10 max-w-4xl mx-auto">
       <h1 className="text-3xl font-bold mb-6">Edit Destination</h1>
 
@@ -222,5 +224,6 @@ export default function EditDestination() {
         Save Changes
       </button>
     </div>
+    </AdminLayout>
   );
 }

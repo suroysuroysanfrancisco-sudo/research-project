@@ -1,5 +1,6 @@
 import { useState, useRef } from "react";
 import { supabase } from "@/lib/supabase";
+import AdminLayout from "@/components/AdminLayout";
 import { uploadImage } from "@/lib/uploadImage";
 import townMap from "@/assets/san-francisco.png";
 import { useNavigate } from "react-router-dom";
@@ -114,6 +115,7 @@ export default function NewDestination() {
   };
 
   return (
+<AdminLayout>
     <div className="p-10 max-w-4xl mx-auto">
       <h1 className="text-3xl font-bold mb-6">Add New Destination</h1>
 
@@ -223,5 +225,6 @@ export default function NewDestination() {
         {uploading ? "Uploading..." : "Save Destination"}
       </button>
     </div>
+    </AdminLayout>
   );
 }

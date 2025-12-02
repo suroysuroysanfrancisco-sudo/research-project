@@ -1,4 +1,5 @@
 import { supabase } from "@/lib/supabaseClient";
+import AdminLayout from "@/components/AdminLayout";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -15,6 +16,7 @@ export default function AdminDestinations() {
   }
 
   return (
+     <AdminLayout>
     <div className="p-6 max-w-5xl mx-auto">
       <h1 className="text-3xl font-bold mb-6">Manage Destinations</h1>
 
@@ -38,5 +40,6 @@ export default function AdminDestinations() {
         ))}
       </div>
     </div>
+    </AdminLayout>
   );
 }
