@@ -6,12 +6,15 @@ import townMap from "@/assets/san-francisco.png";
 
 export default function EditDestination() {
   const { id } = useParams();
-  const [form, setForm] = useState<any>({});
+  const [form, setForm] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
 
   const mapRef = useRef<HTMLDivElement | null>(null);
 
+  // ----------------------------------------
+  // LOAD DESTINATION
+  // ----------------------------------------
   useEffect(() => {
     async function load() {
       const { data, error } = await supabase
@@ -20,7 +23,11 @@ export default function EditDestination() {
         .eq("id", id)
         .single();
 
-      if (error) console.error(error);
+      if (error) {
+        console.error(error);
+        return;
+      }
+
       setForm(data);
       setLoading(false);
     }
@@ -28,9 +35,35 @@ export default function EditDestination() {
     load();
   }, [id]);
 
-  // ---------------------------------------------------
-  // UPDATE DESTINATION
-  // ---------------------------------------------------
+  if (loading || !form) return <p className="p-10 text-lg">Loading...</p>;
+
+  // ----------------------------------------
+  // IMAGE UPLOAD
+  // ----------------------------------------
+  const handleImageUpload = async (e: any) => {
+    try {
+      const file = e.target.files?.[0];
+      if (!file) return;
+
+      setUploading(true);
+
+      const url = await uploadImage(file);
+
+      setForm((prev: any) => ({
+        ...prev,
+        image_url: url,
+      }));
+    } catch (err) {
+      console.error(err);
+      alert("Image upload failed.");
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  // ----------------------------------------
+  // SAVE CHANGES
+  // ----------------------------------------
   const update = async () => {
     const { error } = await supabase
       .from("destinations")
@@ -50,31 +83,9 @@ export default function EditDestination() {
     else alert("Updated successfully!");
   };
 
-  // ---------------------------------------------------
-  // HANDLE IMAGE UPLOAD
-  // ---------------------------------------------------
-  const handleImageUpload = async (e: any) => {
-    try {
-      const file = e.target.files?.[0];
-      if (!file) return;
-      setUploading(true);
-
-      const url = await uploadImage(file);
-
-      setForm((prev: any) => ({
-        ...prev,
-        image_url: url,
-      }));
-    } catch (err) {
-      alert("Image upload failed.");
-    } finally {
-      setUploading(false);
-    }
-  };
-
-  // ---------------------------------------------------
-  // DRAG HOTSPOT ON MAP
-  // ---------------------------------------------------
+  // ----------------------------------------
+  // DRAG HOTSPOT (MAP)
+  // ----------------------------------------
   const handleHotspotDrag = (e: any) => {
     if (!mapRef.current) return;
 
@@ -82,7 +93,7 @@ export default function EditDestination() {
     let top = ((e.clientY - rect.top) / rect.height) * 100;
     let left = ((e.clientX - rect.left) / rect.width) * 100;
 
-    // Prevent hotspot from going outside map
+    // Constrain inside map
     top = Math.min(98, Math.max(2, top));
     left = Math.min(98, Math.max(2, left));
 
@@ -93,14 +104,12 @@ export default function EditDestination() {
     }));
   };
 
-  if (loading) return <p className="p-10 text-lg">Loading...</p>;
-
   return (
     <div className="p-10 max-w-4xl mx-auto">
       <h1 className="text-3xl font-bold mb-6">Edit Destination</h1>
 
       {/* ---------------------------------- */}
-      {/* INTERACTIVE HOTSPOT MAP EDITOR */}
+      {/* HOTSPOT MAP */}
       {/* ---------------------------------- */}
       <div
         ref={mapRef}
@@ -108,14 +117,13 @@ export default function EditDestination() {
       >
         <img src={townMap} className="w-full rounded shadow-lg" />
 
-        {/* HOTSPOT BALL */}
         <div
           draggable
           onDragEnd={handleHotspotDrag}
           className="absolute bg-primary text-white px-3 py-1 rounded-full cursor-move shadow-md text-sm font-semibold"
           style={{
-            top: form.hotspot_top || "50%",
-            left: form.hotspot_left || "50%",
+            top: form.hotspot_top,
+            left: form.hotspot_left,
             transform: "translate(-50%, -50%)",
           }}
         >
@@ -129,7 +137,9 @@ export default function EditDestination() {
       <label className="block mb-2 font-semibold">Destination Image</label>
       <input type="file" accept="image/*" onChange={handleImageUpload} />
 
-      {uploading && <p className="text-sm text-muted-foreground">Uploading...</p>}
+      {uploading && (
+        <p className="text-sm text-muted-foreground">Uploading...</p>
+      )}
 
       {form.image_url && (
         <img
@@ -140,19 +150,29 @@ export default function EditDestination() {
       )}
 
       {/* ---------------------------------- */}
+      {/* READ ONLY ID FIELD */}
+      {/* ---------------------------------- */}
+      <label className="block mt-6 mb-2 font-semibold">Destination ID</label>
+      <input
+        readOnly
+        value={form.id}
+        className="input w-full mb-6 bg-muted cursor-not-allowed"
+      />
+
+      {/* ---------------------------------- */}
       {/* FORM FIELDS */}
       {/* ---------------------------------- */}
-      <label className="block mt-6 mb-2 font-semibold">Title</label>
+      <label className="block mb-2 font-semibold">Title</label>
       <input
         className="input w-full mb-4"
-        value={form.title || ""}
+        value={form.title}
         onChange={(e) => setForm({ ...form, title: e.target.value })}
       />
 
       <label className="block mb-2 font-semibold">Short Description</label>
       <textarea
         className="input w-full mb-4"
-        value={form.short_description || ""}
+        value={form.short_description}
         onChange={(e) =>
           setForm({ ...form, short_description: e.target.value })
         }
@@ -161,7 +181,7 @@ export default function EditDestination() {
       <label className="block mb-2 font-semibold">Long Description</label>
       <textarea
         className="input w-full mb-4"
-        value={form.long_description || ""}
+        value={form.long_description}
         onChange={(e) =>
           setForm({ ...form, long_description: e.target.value })
         }
@@ -170,29 +190,28 @@ export default function EditDestination() {
       <label className="block mb-2 font-semibold">Address</label>
       <input
         className="input w-full mb-4"
-        value={form.address || ""}
+        value={form.address}
         onChange={(e) => setForm({ ...form, address: e.target.value })}
       />
 
-      <label className="block mb-2 font-semibold">Map Embed URL</label>
+      <label className="block mb-2 font-semibold">Google Map Embed URL</label>
       <textarea
         className="input w-full mb-4"
-        value={form.map_embed || ""}
+        value={form.map_embed}
         onChange={(e) => setForm({ ...form, map_embed: e.target.value })}
       />
 
-      {/* AUTO UPDATED HOTSPOT VALUES */}
       <label className="block mb-2 font-semibold">Hotspot Top (%)</label>
       <input
         className="input w-full mb-4"
-        value={form.hotspot_top || ""}
+        value={form.hotspot_top}
         onChange={(e) => setForm({ ...form, hotspot_top: e.target.value })}
       />
 
       <label className="block mb-2 font-semibold">Hotspot Left (%)</label>
       <input
         className="input w-full mb-4"
-        value={form.hotspot_left || ""}
+        value={form.hotspot_left}
         onChange={(e) => setForm({ ...form, hotspot_left: e.target.value })}
       />
 

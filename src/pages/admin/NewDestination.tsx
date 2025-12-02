@@ -32,9 +32,9 @@ export default function NewDestination() {
   const [uploading, setUploading] = useState(false);
   const mapRef = useRef<HTMLDivElement | null>(null);
 
-  // -----------------------------
-  // IMAGE UPLOAD
-  // -----------------------------
+  // ---------------------------------------
+  // IMAGE UPLOAD HANDLER
+  // ---------------------------------------
   const handleImageUpload = async (e: any) => {
     try {
       const file = e.target.files?.[0];
@@ -47,16 +47,19 @@ export default function NewDestination() {
         ...prev,
         image_url: url,
       }));
+
+      alert("Image uploaded!");
     } catch (err) {
+      console.error(err);
       alert("Image upload failed.");
     } finally {
       setUploading(false);
     }
   };
 
-  // -----------------------------
-  // DRAG HOTSPOT
-  // -----------------------------
+  // ---------------------------------------
+  // DRAG HOTSPOT ON MAP
+  // ---------------------------------------
   const handleHotspotDrag = (e: any) => {
     if (!mapRef.current) return;
 
@@ -74,13 +77,23 @@ export default function NewDestination() {
     }));
   };
 
-  // -----------------------------
-  // SAVE NEW DESTINATION
-  // -----------------------------
+  // ---------------------------------------
+  // SAVE NEW DESTINATION TO SUPABASE
+  // ---------------------------------------
   const save = async () => {
+    if (!form.id || !form.title) {
+      alert("Please enter a title.");
+      return;
+    }
+
+    if (!form.image_url) {
+      alert("Please upload an image.");
+      return;
+    }
+
     const { error } = await supabase.from("destinations").insert([
       {
-        id: form.id, // <--- NEW (IMPORTANT)
+        id: form.id,
         title: form.title,
         short_description: form.short_description,
         long_description: form.long_description,
@@ -134,7 +147,7 @@ export default function NewDestination() {
       <input type="file" accept="image/*" onChange={handleImageUpload} />
 
       {uploading && (
-        <p className="text-sm text-muted-foreground">Uploading...</p>
+        <p className="text-sm text-muted-foreground mt-2">Uploading...</p>
       )}
 
       {form.image_url && (
@@ -149,7 +162,7 @@ export default function NewDestination() {
       {/* FORM FIELDS */}
       {/* --------------------------------------- */}
 
-      {/* Auto ID Preview */}
+      {/* Auto ID Field */}
       <label className="block mt-6 mb-2 font-semibold">Generated ID</label>
       <input
         className="input w-full mb-4 bg-muted cursor-not-allowed"
@@ -165,7 +178,7 @@ export default function NewDestination() {
           setForm({
             ...form,
             title: e.target.value,
-            id: slugify(e.target.value), // AUTO GENERATE ID
+            id: slugify(e.target.value), // Auto-generate ID from title
           })
         }
       />
@@ -203,10 +216,11 @@ export default function NewDestination() {
       />
 
       <button
-        className="bg-primary text-white px-6 py-3 rounded mt-6 shadow"
+        disabled={uploading}
+        className="bg-primary text-white px-6 py-3 rounded mt-6 shadow disabled:opacity-50"
         onClick={save}
       >
-        Save Destination
+        {uploading ? "Uploading..." : "Save Destination"}
       </button>
     </div>
   );
