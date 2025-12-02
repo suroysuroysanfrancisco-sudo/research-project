@@ -1,96 +1,28 @@
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { supabase } from "@/lib/supabase";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-import Index from "./pages/Index";
-import Destinations from "./pages/Destinations";
-import DestinationSingle from "./pages/DestinationSingle";
-import VirtualTours from "./pages/VirtualTours";
-import About from "./pages/About";
-import Contact from "./pages/Contact";
-import NotFound from "./pages/NotFound";
+export default function RequireAdmin({ children }: any) {
+  const navigate = useNavigate();
+  const [checking, setChecking] = useState(true);
 
-// ADMIN PAGES
-import AdminLogin from "./pages/admin/AdminLogin";
-import AdminDashboard from "./pages/admin/AdminDashboard";
-import EditDestination from "./pages/admin/EditDestination";
-import AdminDestinations from "./pages/admin/AdminDestinations";
-import NewDestination from "./pages/admin/NewDestination";
+  useEffect(() => {
+    async function checkAuth() {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
 
-// AUTH WRAPPER
-import RequireAdmin from "@/components/auth/RequireAdmin";
+      if (!session) {
+        navigate("/admin/login");
+      } else {
+        setChecking(false);
+      }
+    }
 
-import { HelmetProvider } from "react-helmet-async";
+    checkAuth();
+  }, [navigate]);
 
-const queryClient = new QueryClient();
+  if (checking) return <p className="p-10">Checking authentication...</p>;
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <HelmetProvider>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <Routes>
-
-            {/* PUBLIC ROUTES */}
-            <Route path="/" element={<Index />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/destinations" element={<Destinations />} />
-            <Route path="/destinations/:id" element={<DestinationSingle />} />
-            <Route path="/virtual-tours" element={<VirtualTours />} />
-            <Route path="/contact" element={<Contact />} />
-
-            {/* LOGIN (NOT PROTECTED) */}
-            <Route path="/admin/login" element={<AdminLogin />} />
-
-            {/* PROTECTED ADMIN ROUTES */}
-            <Route
-              path="/admin"
-              element={
-                <RequireAdmin>
-                  <AdminDashboard />
-                </RequireAdmin>
-              }
-            />
-
-            <Route
-              path="/admin/destinations"
-              element={
-                <RequireAdmin>
-                  <AdminDestinations />
-                </RequireAdmin>
-              }
-            />
-
-            <Route
-              path="/admin/destinations/new"
-              element={
-                <RequireAdmin>
-                  <NewDestination />
-                </RequireAdmin>
-              }
-            />
-
-            <Route
-              path="/admin/destinations/edit/:id"
-              element={
-                <RequireAdmin>
-                  <EditDestination />
-                </RequireAdmin>
-              }
-            />
-
-            {/* 404 */}
-            <Route path="*" element={<NotFound />} />
-
-          </Routes>
-        </BrowserRouter>
-      </TooltipProvider>
-    </HelmetProvider>
-  </QueryClientProvider>
-);
-
-export default App;
+  return children;
+}
