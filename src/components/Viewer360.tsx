@@ -8,33 +8,45 @@ interface Viewer360Props {
   className?: string;
 }
 
-export const Viewer360 = ({ imageUrl, title, className = "" }: Viewer360Props) => {
+export const Viewer360 = ({
+  imageUrl,
+  title,
+  className = "",
+}: Viewer360Props) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const viewerRef = useRef<Viewer | null>(null);
 
   useEffect(() => {
-    if (!containerRef.current) return;
-
+    if (!containerRef.current || !imageUrl) return;
+    
     viewerRef.current?.destroy();
 
-    viewerRef.current = new Viewer({
-      container: containerRef.current,
-      panorama: imageUrl,
-      caption: title ?? "",
-      touchmoveTwoFingers: true,
-      defaultZoomLvl: 0,
-      navbar: ["autorotate", "zoom", "fullscreen"],
+    const raf = requestAnimationFrame(() => {
+      viewerRef.current = new Viewer({
+        container: containerRef.current!,
+        panorama: imageUrl,
+        caption: title ?? "",
+        defaultZoomLvl: 0,
+        touchmoveTwoFingers: true,
+        navbar: ["autorotate", "zoom", "fullscreen"],
+      });
     });
 
     return () => {
+      cancelAnimationFrame(raf);
       viewerRef.current?.destroy();
+      viewerRef.current = null;
     };
   }, [imageUrl, title]);
 
   return (
     <div
       ref={containerRef}
-      className={`w-full rounded-lg overflow-hidden shadow-large ${className}`}
+      className={`w-full bg-black rounded-lg overflow-hidden shadow-large ${className}`}
+      style={{
+        height: "70vh",
+        minHeight: "400px",
+      }}
     />
   );
 };
