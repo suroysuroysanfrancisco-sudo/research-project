@@ -82,14 +82,14 @@ const DestinationSingle = () => {
               <Clock className="w-4 h-4 text-primary" /> 2–3 hours
             </span>
             <span className="inline-flex items-center gap-1 bg-white/90 text-sm px-3 py-1 rounded-full">
-              <MapPin className="w-4 h-4 text-primary" /> {data.location}
+              <MapPin className="w-4 h-4 text-primary" /> {data.address}
             </span>
           </div>
         </div>
       </section>
 
       {/* CONTENT */}
-      <section className="container mx-auto px-4 max-w-6xl pb-24">
+      <section className="container mx-auto px-4 pb-24">
         <div className="grid lg:grid-cols-3 gap-10">
           
           {/* LEFT CONTENT */}
@@ -105,7 +105,7 @@ const DestinationSingle = () => {
               </p>
             </div>
 
-            {/* HIGHLIGHTS */}
+            {/* HIGHLIGHTS 
             <div className="bg-card rounded-xl p-8 shadow-sm">
               <h3 className="text-xl font-semibold mb-6">Highlights</h3>
               <div className="grid sm:grid-cols-2 gap-4">
@@ -117,7 +117,7 @@ const DestinationSingle = () => {
                 ))}
               </div>
             </div>
-
+            */}
             {/* TRAVELER TIPS */}
             <div className="bg-primary/5 border border-primary/10 rounded-xl p-8">
               <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
