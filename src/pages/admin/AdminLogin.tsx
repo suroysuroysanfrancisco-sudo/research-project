@@ -5,14 +5,25 @@ export default function AdminLogin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  async function handleLogin(e: any) {
+  async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
+    setError("");
+    setLoading(true);
+
     const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
-    if (error) return setError(error.message);
+
+    if (error) {
+      setError(error.message);
+      setLoading(false);
+      return;
+    }
+
+    // ✅ Login succeeded — let RequireAdmin decide access
     window.location.href = "/admin";
   }
 
@@ -24,13 +35,16 @@ export default function AdminLogin() {
       >
         <h1 className="text-2xl font-bold mb-4 text-center">Admin Login</h1>
 
-        {error && <p className="text-red-500 mb-3">{error}</p>}
+        {error && (
+          <p className="text-red-500 mb-3 text-sm text-center">{error}</p>
+        )}
 
         <input
           type="email"
           placeholder="Email"
           className="w-full p-3 border rounded mb-3"
           onChange={(e) => setEmail(e.target.value)}
+          required
         />
 
         <input
@@ -38,10 +52,14 @@ export default function AdminLogin() {
           placeholder="Password"
           className="w-full p-3 border rounded mb-3"
           onChange={(e) => setPassword(e.target.value)}
+          required
         />
 
-        <button className="w-full bg-primary text-white py-3 rounded">
-          Login
+        <button
+          disabled={loading}
+          className="w-full bg-primary text-white py-3 rounded"
+        >
+          {loading ? "Logging in..." : "Login"}
         </button>
       </form>
     </div>

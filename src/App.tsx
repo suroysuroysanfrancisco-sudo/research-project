@@ -17,6 +17,8 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminDestinations from "./pages/admin/AdminDestinations";
 import NewDestination from "./pages/admin/NewDestination";
 import EditDestination from "./pages/admin/EditDestination";
+import AdminNewUser from "./pages/admin/AdminNewUser";
+import AdminUsers from "./pages/admin/AdminUsers";
 
 import RequireAdmin from "@/components/RequireAdmin";
 
@@ -74,6 +76,24 @@ const App = () => (
               element={
                 <RequireAdmin>
                   <EditDestination />
+                </RequireAdmin>
+              }
+            />
+
+            <Route
+              path="/admin/users/new"
+              element={
+                <RequireAdmin>
+                  <AdminNewUser />
+                </RequireAdmin>
+              }
+            />
+            
+            <Route
+              path="/admin/users"
+              element={
+                <RequireAdmin>
+                  <AdminUsers />
                 </RequireAdmin>
               }
             />
