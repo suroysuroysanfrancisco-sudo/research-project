@@ -84,8 +84,7 @@ const About = () => {
               </div>
               <div className="bg-card p-8 rounded-lg shadow-medium prose prose-lg max-w-none">
                 <p className="text-muted-foreground leading-relaxed mb-4">
-                  The town of{" "}
-                  <span className="text-primary font-semibold">San Francisco</span>,
+                  The town of{" "} <span className="text-primary font-semibold">San Francisco</span>,
                   is the largest and most vibrant municipality on the Camotes Islands, located east of Cebu in the Philippines. Known for its pristine white-sand beaches, turquoise waters, picturesque caves, and serene natural destinations, San Francisco combines tropical beauty with a laid-back, welcoming island atmosphere. It is the main tourism hub of Camotes and the gateway to many of the island’s best attractions.
                 </p>
 
