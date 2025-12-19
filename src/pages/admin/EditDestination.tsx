@@ -136,19 +136,19 @@ export default function EditDestination() {
       <input
         readOnly
         value={form.id}
-        className="input w-full mb-6 bg-muted cursor-not-allowed"
+        className="px-4 py-2 input w-full mb-6 bg-muted cursor-not-allowed"
       />
 
       <label className="block mb-2 font-semibold">Title</label>
       <input
-        className="input w-full mb-4"
+        className="px-4 py-2 input w-full mb-4"
         value={form.title}
         onChange={(e) => setForm({ ...form, title: e.target.value })}
       />
 
       <label className="block mb-2 font-semibold">Short Description</label>
       <textarea
-        className="input w-full mb-4"
+        className="px-4 py-2 input w-full mb-4"
         value={form.short_description}
         onChange={(e) =>
           setForm({ ...form, short_description: e.target.value })
@@ -157,7 +157,7 @@ export default function EditDestination() {
 
       <label className="block mb-2 font-semibold">Long Description</label>
       <textarea
-        className="input w-full mb-4"
+        className="px-4 py-2 input w-full mb-4"
         value={form.long_description}
         onChange={(e) =>
           setForm({ ...form, long_description: e.target.value })
@@ -166,28 +166,30 @@ export default function EditDestination() {
 
       <label className="block mb-2 font-semibold">Address</label>
       <input
-        className="input w-full mb-4"
+        className="px-4 py-2 input w-full mb-4"
         value={form.address}
         onChange={(e) => setForm({ ...form, address: e.target.value })}
       />
 
       <label className="block mb-2 font-semibold">Google Map Embed URL</label>
       <textarea
-        className="input w-full mb-4"
+        className="px-4 py-2 input w-full mb-4"
         value={form.map_embed}
         onChange={(e) => setForm({ ...form, map_embed: e.target.value })}
       />
 
       <label className="block mb-2 font-semibold">Hotspot Top (%)</label>
       <input
-        className="input w-full mb-4"
+        readOnly
+        className="px-4 py-2 input w-full mb-4 bg-muted cursor-not-allowed"
         value={form.hotspot_top}
         onChange={(e) => setForm({ ...form, hotspot_top: e.target.value })}
       />
 
       <label className="block mb-2 font-semibold">Hotspot Left (%)</label>
       <input
-        className="input w-full mb-4"
+        readOnly
+        className="px-4 py-2 input w-full mb-4 bg-muted cursor-not-allowed"
         value={form.hotspot_left}
         onChange={(e) => setForm({ ...form, hotspot_left: e.target.value })}
       />

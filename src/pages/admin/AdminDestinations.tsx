@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 export default function AdminDestinations() {
-  const [destinations, setDestinations] = useState([]);
+  const [destinations, setDestinations] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     load();
@@ -15,31 +16,72 @@ export default function AdminDestinations() {
     setDestinations(data || []);
   }
 
+  async function handleDelete(id: string) {
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this destination? This action cannot be undone."
+    );
+
+    if (!confirmed) return;
+
+    setLoading(true);
+
+    const { error } = await supabase
+      .from("destinations")
+      .delete()
+      .eq("id", id);
+
+    if (error) {
+      alert("Failed to delete destination.");
+      console.error(error);
+    } else {
+      // remove from UI instantly
+      setDestinations((prev) => prev.filter((d) => d.id !== id));
+    }
+
+    setLoading(false);
+  }
+
   return (
-     <AdminLayout>
-    <div className="p-6 max-w-5xl mx-auto">
-      <h1 className="text-3xl font-bold mb-6">Manage Destinations</h1>
+    <AdminLayout>
+      <div className="p-6 max-w-5xl mx-auto">
+        <h1 className="text-3xl font-bold mb-6">Manage Destinations</h1>
 
-      <Link
-        to="/admin/destinations/new"
-        className="bg-primary text-white px-4 py-2 rounded"
-      >
-        Add New Destination
-      </Link>
+        <Link
+          to="/admin/destinations/new"
+          className="inline-block bg-primary text-white px-4 py-2 rounded mb-6"
+        >
+          Add New Destination
+        </Link>
 
-      <div className="mt-6 grid grid-cols-1 gap-4">
-        {destinations.map((d: any) => (
-          <Link
-            key={d.id}
-            to={`/admin/destinations/edit/${d.id}`}
-            className="p-4 bg-card shadow rounded"
-          >
-            <h2 className="text-xl font-semibold">{d.title}</h2>
-            <p className="text-muted-foreground">{d.short_description}</p>
-          </Link>
-        ))}
+        <div className="grid grid-cols-1 gap-4">
+          {destinations.map((d) => (
+            <div
+              key={d.id}
+              className="p-4 bg-card shadow rounded flex justify-between items-start"
+            >
+              {/* EDIT LINK */}
+              <Link
+                to={`/admin/destinations/edit/${d.id}`}
+                className="flex-1"
+              >
+                <h2 className="text-xl font-semibold">{d.title}</h2>
+                <p className="text-muted-foreground text-sm">
+                  {d.short_description}
+                </p>
+              </Link>
+
+              {/* DELETE BUTTON */}
+              <button
+                onClick={() => handleDelete(d.id)}
+                disabled={loading}
+                className="ml-4 text-sm text-red-600 hover:text-red-800 hover:underline"
+              >
+                Delete
+              </button>
+            </div>
+          ))}
+        </div>
       </div>
-    </div>
     </AdminLayout>
   );
 }
