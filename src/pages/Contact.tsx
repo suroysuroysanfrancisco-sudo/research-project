@@ -14,11 +14,13 @@ import { toast } from "sonner";
 
 const Contact = () => {
   const [state, handleSubmit] = useForm("mzdrdqlo");
+  const formRef = React.useRef<HTMLFormElement>(null);
 
   React.useEffect(() => {
     if (state.succeeded) {
       toast.success("Message sent! We'll get back to you soon.");
       console.log("Form submitted successfully");
+      formRef.current?.reset();
     }
     if (state.errors) {
       console.error("Formspree Error Details:", state.errors);
@@ -82,7 +84,7 @@ const Contact = () => {
                 </h2>
 
                 {/* ✅ FORM SUBMISSION GOES TO FORMSPREE */}
-                <form onSubmit={handleSubmit} method="POST" className="space-y-6">
+                <form ref={formRef} onSubmit={handleSubmit} method="POST" className="space-y-6">
                   {/* optional: fixed email subject for inbox readability */}
                   <input
                     type="hidden"
