@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import AdminLayout from "@/components/AdminLayout";
+import { toast } from "sonner";
 
 export default function AdminNewUser() {
   const [email, setEmail] = useState("");
@@ -17,7 +18,7 @@ export default function AdminNewUser() {
     const session = data.session;
 
     if (!session) {
-      alert("You must be logged in as admin.");
+      toast.error("You must be logged in as admin.");
       setLoading(false);
       return;
     }
@@ -41,9 +42,9 @@ export default function AdminNewUser() {
 
     if (!res.ok) {
       const err = await res.text();
-      alert("Failed to create user: " + err);
+      toast.error("Failed to create user: " + err);
     } else {
-      alert("User created successfully");
+      toast.success("User created successfully");
       setEmail("");
       setPassword("");
       setRole("admin");
