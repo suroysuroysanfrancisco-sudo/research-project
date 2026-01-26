@@ -16,8 +16,15 @@ const Contact = () => {
   const [state, handleSubmit] = useForm("mzdrdqlo");
 
   React.useEffect(() => {
-    if (state.succeeded) toast.success("Message sent! We'll get back to you soon.");
-    if (state.errors?.length) toast.error("Failed to send message. Please try again.");
+    if (state.succeeded) {
+      toast.success("Message sent! We'll get back to you soon.");
+      console.log("Form submitted successfully");
+    }
+    if (state.errors) {
+      console.error("Formspree Error Details:", state.errors);
+      // Safe fallback for error message display
+      toast.error("Failed to send message. Please check the console for details.");
+    }
   }, [state.succeeded, state.errors]);
 
   const contactInfo = [
