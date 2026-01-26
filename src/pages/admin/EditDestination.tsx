@@ -177,8 +177,19 @@ export default function EditDestination() {
       <label className="block mb-2 font-semibold">Google Map Embed URL</label>
       <textarea
         className="px-4 py-2 input w-full mb-4"
+        placeholder="Paste Google Maps Embed URL or iframe code here"
         value={form.map_embed}
-        onChange={(e) => setForm({ ...form, map_embed: e.target.value })}
+        onChange={(e) => {
+          let val = e.target.value;
+          if (val.includes("<iframe")) {
+            const match = val.match(/src="([^"]+)"/);
+            if (match && match[1]) {
+              val = match[1];
+              toast.success("Extracted URL from iframe code");
+            }
+          }
+          setForm({ ...form, map_embed: val });
+        }}
       />
 
       <label className="block mb-2 font-semibold">Hotspot Top (%)</label>
