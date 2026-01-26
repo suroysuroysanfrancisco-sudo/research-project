@@ -36,10 +36,13 @@ export default function AdminUsers() {
   }
 
   async function deleteUser(id: string) {
-    if (!confirm("Delete this user permanently?")) return;
+    if (!window.confirm("Delete this user permanently?")) return;
 
     const { data } = await supabase.auth.getSession();
-    if (!data.session) return;
+    if (!data.session) {
+      toast.error("Session expired. Please log in again.");
+      return;
+    }
 
     const res = await fetch(
       `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/delete-user`,
@@ -60,17 +63,19 @@ export default function AdminUsers() {
         console.error("Delete user error:", text);
     } else {
         toast.success("User deleted successfully");
-        // remove from UI instantly
         setUsers((prev) => prev.filter((u) => u.id !== id));
     }
   }
 
   async function resetPassword(userId: string) {
-    const newPassword = prompt("Enter new password for this admin:");
+    const newPassword = window.prompt("Enter new password for this admin:");
     if (!newPassword) return;
 
     const { data } = await supabase.auth.getSession();
-    if (!data.session) return;
+    if (!data.session) {
+      toast.error("Session expired. Please log in again.");
+      return;
+    }
 
     const res = await fetch(
       `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/reset-password`,
@@ -120,7 +125,11 @@ export default function AdminUsers() {
 
                   <td className="p-3">
                     <button
-                      onClick={() => resetPassword(u.id)}
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        resetPassword(u.id);
+                      }}
                       className="bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white px-3 py-1.5 rounded border border-blue-200 transition-colors text-sm font-medium mr-3"
                     >
                       Reset Password
@@ -129,7 +138,11 @@ export default function AdminUsers() {
 
                   <td className="p-3">
                     <button
-                      onClick={() => deleteUser(u.id)}
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        deleteUser(u.id);
+                      }}
                       className="bg-red-50 text-red-600 hover:bg-red-600 hover:text-white px-3 py-1.5 rounded border border-red-200 transition-colors text-sm font-medium"
                     >
                       Delete

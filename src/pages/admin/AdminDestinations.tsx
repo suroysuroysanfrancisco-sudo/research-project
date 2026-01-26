@@ -74,8 +74,9 @@ export default function AdminDestinations() {
 
               <div className="ml-4 flex items-center h-full">
                 <button
+                  type="button"
                   onClick={(e) => {
-                    e.preventDefault();
+                    e.stopPropagation();
                     handleDelete(d.id);
                   }}
                   disabled={loading}
