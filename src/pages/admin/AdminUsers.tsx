@@ -36,69 +36,87 @@ export default function AdminUsers() {
   }
 
   async function deleteUser(id: string) {
-    if (!window.confirm("Delete this user permanently?")) return;
-
-    const { data } = await supabase.auth.getSession();
-    if (!data.session) {
-      toast.error("Session expired. Please log in again.");
-      return;
-    }
-
-    const res = await fetch(
-      `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/delete-user`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          apikey: import.meta.env.VITE_SUPABASE_ANON_KEY,
-          Authorization: `Bearer ${data.session.access_token}`,
-        },
-        body: JSON.stringify({ user_id: id }),
+    try {
+      if (!window.confirm("Delete this user permanently?")) {
+        toast("Delete cancelled");
+        return;
       }
-    );
 
-    if (!res.ok) {
-        const text = await res.text();
-        toast.error("Failed to delete user: " + text);
-        console.error("Delete user error:", text);
-    } else {
-        toast.success("User deleted successfully");
-        setUsers((prev) => prev.filter((u) => u.id !== id));
+      const { data } = await supabase.auth.getSession();
+      if (!data.session) {
+        toast.error("Session expired. Please log in again.");
+        return;
+      }
+
+      toast("Sending delete request to server...");
+      const res = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/delete-user`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            apikey: import.meta.env.VITE_SUPABASE_ANON_KEY,
+            Authorization: `Bearer ${data.session.access_token}`,
+          },
+          body: JSON.stringify({ user_id: id }),
+        }
+      );
+
+      if (!res.ok) {
+          const text = await res.text();
+          toast.error("Failed to delete user: " + text);
+          console.error("Delete user error:", text);
+      } else {
+          toast.success("User deleted successfully");
+          setUsers((prev) => prev.filter((u) => u.id !== id));
+      }
+    } catch (err: any) {
+      console.error("Critical error in deleteUser:", err);
+      toast.error("System Error: " + err.message);
     }
   }
 
   async function resetPassword(userId: string) {
-    const newPassword = window.prompt("Enter new password for this admin:");
-    if (!newPassword) return;
-
-    const { data } = await supabase.auth.getSession();
-    if (!data.session) {
-      toast.error("Session expired. Please log in again.");
-      return;
-    }
-
-    const res = await fetch(
-      `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/reset-password`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          apikey: import.meta.env.VITE_SUPABASE_ANON_KEY,
-          Authorization: `Bearer ${data.session.access_token}`,
-        },
-        body: JSON.stringify({
-          user_id: userId,
-          new_password: newPassword,
-        }),
+    try {
+      const newPassword = window.prompt("Enter new password for this admin:");
+      if (!newPassword) {
+        toast("Password reset cancelled");
+        return;
       }
-    );
 
-    if (!res.ok) {
-      const text = await res.text();
-      toast.error("Failed to reset password: " + text);
-      console.error("Reset password error:", text);
-    } else {
-      toast.success("Password reset successfully");
+      const { data } = await supabase.auth.getSession();
+      if (!data.session) {
+        toast.error("Session expired. Please log in again.");
+        return;
+      }
+
+      toast("Sending reset request...");
+      const res = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/reset-password`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            apikey: import.meta.env.VITE_SUPABASE_ANON_KEY,
+            Authorization: `Bearer ${data.session.access_token}`,
+          },
+          body: JSON.stringify({
+            user_id: userId,
+            new_password: newPassword,
+          }),
+        }
+      );
+
+      if (!res.ok) {
+        const text = await res.text();
+        toast.error("Failed to reset password: " + text);
+        console.error("Reset password error:", text);
+      } else {
+        toast.success("Password reset successfully");
+      }
+    } catch (err: any) {
+      console.error("Critical error in resetPassword:", err);
+      toast.error("System Error: " + err.message);
     }
   }
 

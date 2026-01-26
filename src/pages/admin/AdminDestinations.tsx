@@ -18,29 +18,39 @@ export default function AdminDestinations() {
   }
 
   async function handleDelete(id: string) {
-    const confirmed = window.confirm(
-      "Are you sure you want to delete this destination? This action cannot be undone."
-    );
+    try {
+      console.log("handleDelete initiated for:", id);
+      
+      const confirmed = window.confirm(
+        "Are you sure you want to delete this destination? This action cannot be undone."
+      );
 
-    if (!confirmed) return;
+      if (!confirmed) {
+        toast("Delete cancelled by user");
+        return;
+      }
 
-    setLoading(true);
+      toast("Database request sent...");
+      setLoading(true);
 
-    const { error } = await supabase
-      .from("destinations")
-      .delete()
-      .eq("id", id);
+      const { error } = await supabase
+        .from("destinations")
+        .delete()
+        .eq("id", id);
 
-    if (error) {
-      toast.error("Failed to delete destination: " + error.message);
-      console.error(error);
-    } else {
-      toast.success("Destination deleted successfully");
-      // remove from UI instantly
-      setDestinations((prev) => prev.filter((d) => d.id !== id));
+      if (error) {
+        toast.error("Failed to delete destination: " + error.message);
+        console.error(error);
+      } else {
+        toast.success("Destination deleted successfully");
+        setDestinations((prev) => prev.filter((d) => d.id !== id));
+      }
+    } catch (err: any) {
+      console.error("Critical error in handleDelete:", err);
+      toast.error("System Error: " + err.message);
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   }
 
   return (
