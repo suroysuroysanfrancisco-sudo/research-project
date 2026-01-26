@@ -4,13 +4,11 @@ import AdminLayout from "@/components/AdminLayout";
 import { uploadImage } from "@/lib/uploadImage";
 import townMap from "@/assets/san-francisco.png";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 export default function NewDestination() {
   const navigate = useNavigate();
 
-  // ---------------------------------------
-  // SLUGIFY FUNCTION (Auto-generate ID)
-  // ---------------------------------------
   const slugify = (text: string) =>
     text
       .toLowerCase()
@@ -31,36 +29,9 @@ export default function NewDestination() {
   });
 
   const [uploading, setUploading] = useState(false);
+  const [saving, setSaving] = useState(false);
   const mapRef = useRef<HTMLDivElement | null>(null);
 
-  // ---------------------------------------
-  // IMAGE UPLOAD HANDLER
-  // ---------------------------------------
-  const handleImageUpload = async (e: any) => {
-    try {
-      const file = e.target.files?.[0];
-      if (!file) return;
-
-      setUploading(true);
-      const url = await uploadImage(file);
-
-      setForm((prev: any) => ({
-        ...prev,
-        image_url: url,
-      }));
-
-      alert("Image uploaded!");
-    } catch (err) {
-      console.error(err);
-      alert("Image upload failed.");
-    } finally {
-      setUploading(false);
-    }
-  };
-
-  // ---------------------------------------
-  // DRAG HOTSPOT ON MAP
-  // ---------------------------------------
   const handleHotspotDrag = (e: any) => {
     if (!mapRef.current) return;
 
@@ -78,39 +49,70 @@ export default function NewDestination() {
     }));
   };
 
-  // ---------------------------------------
-  // SAVE NEW DESTINATION TO SUPABASE
-  // ---------------------------------------
+  const handleImageUpload = async (e: any) => {
+    try {
+      const file = e.target.files?.[0];
+      if (!file) return;
+
+      toast("Uploading image...");
+      setUploading(true);
+      const url = await uploadImage(file);
+
+      setForm((prev: any) => ({
+        ...prev,
+        image_url: url,
+      }));
+
+      toast.success("Image uploaded!");
+    } catch (err: any) {
+      console.error(err);
+      toast.error("Image upload failed: " + err.message);
+    } finally {
+      setUploading(false);
+    }
+  };
+
   const save = async () => {
     if (!form.id || !form.title) {
-      alert("Please enter a title.");
+      toast.error("Please enter a title.");
       return;
     }
 
     if (!form.image_url) {
-      alert("Please upload an image.");
+      toast.error("Please upload an image first.");
       return;
     }
 
-    const { error } = await supabase.from("destinations").insert([
-      {
-        id: form.id,
-        title: form.title,
-        short_description: form.short_description,
-        long_description: form.long_description,
-        address: form.address,
-        map_embed: form.map_embed,
-        hotspot_top: form.hotspot_top,
-        hotspot_left: form.hotspot_left,
-        image_url: form.image_url,
-      },
-    ]);
+    try {
+      setSaving(true);
+      toast("Saving destination...");
+      console.log("Saving form data:", form);
 
-    if (error) {
-      alert(error.message);
-    } else {
-      alert("Destination added successfully!");
-      navigate("/admin/destinations");
+      const { error } = await supabase.from("destinations").insert([
+        {
+          id: form.id,
+          title: form.title,
+          short_description: form.short_description,
+          long_description: form.long_description,
+          address: form.address,
+          map_embed: form.map_embed,
+          hotspot_top: form.hotspot_top,
+          hotspot_left: form.hotspot_left,
+          image_url: form.image_url,
+        },
+      ]);
+
+      if (error) {
+        toast.error("Database Error: " + error.message);
+      } else {
+        toast.success("Destination added successfully!");
+        navigate("/admin/destinations");
+      }
+    } catch (err: any) {
+      toast.error("System Error: " + err.message);
+      console.error(err);
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -207,11 +209,11 @@ export default function NewDestination() {
       />
 
       <button
-        disabled={uploading}
+        disabled={uploading || saving}
         className="bg-primary text-white px-6 py-3 rounded mt-6 shadow disabled:opacity-50"
         onClick={save}
       >
-        {uploading ? "Uploading..." : "Save Destination"}
+        {saving ? "Saving..." : uploading ? "Uploading Image..." : "Save Destination"}
       </button>
     </div>
     </AdminLayout>
