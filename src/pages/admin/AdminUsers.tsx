@@ -35,20 +35,19 @@ export default function AdminUsers() {
     toast.success("Role updated successfully");
   }
 
+  const [confirmingDeleteId, setConfirmingDeleteId] = useState<string | null>(null);
+  const [resetingId, setResetingId] = useState<string | null>(null);
+  const [newPassword, setNewPassword] = useState("");
+
   async function deleteUser(id: string) {
     try {
-      if (!window.confirm("Delete this user permanently?")) {
-        toast("Delete cancelled");
-        return;
-      }
-
       const { data } = await supabase.auth.getSession();
       if (!data.session) {
         toast.error("Session expired. Please log in again.");
         return;
       }
 
-      toast("Sending delete request to server...");
+      toast("Deleting admin...");
       const res = await fetch(
         `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/delete-user`,
         {
@@ -65,32 +64,31 @@ export default function AdminUsers() {
       if (!res.ok) {
           const text = await res.text();
           toast.error("Failed to delete user: " + text);
-          console.error("Delete user error:", text);
       } else {
           toast.success("User deleted successfully");
           setUsers((prev) => prev.filter((u) => u.id !== id));
       }
     } catch (err: any) {
-      console.error("Critical error in deleteUser:", err);
       toast.error("System Error: " + err.message);
+    } finally {
+      setConfirmingDeleteId(null);
     }
   }
 
   async function resetPassword(userId: string) {
-    try {
-      const newPassword = window.prompt("Enter new password for this admin:");
-      if (!newPassword) {
-        toast("Password reset cancelled");
-        return;
-      }
+    if (!newPassword) {
+      toast.error("Please enter a new password");
+      return;
+    }
 
+    try {
       const { data } = await supabase.auth.getSession();
       if (!data.session) {
         toast.error("Session expired. Please log in again.");
         return;
       }
 
-      toast("Sending reset request...");
+      toast("Updating password...");
       const res = await fetch(
         `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/reset-password`,
         {
@@ -110,12 +108,12 @@ export default function AdminUsers() {
       if (!res.ok) {
         const text = await res.text();
         toast.error("Failed to reset password: " + text);
-        console.error("Reset password error:", text);
       } else {
         toast.success("Password reset successfully");
+        setResetingId(null);
+        setNewPassword("");
       }
     } catch (err: any) {
-      console.error("Critical error in resetPassword:", err);
       toast.error("System Error: " + err.message);
     }
   }
@@ -132,7 +130,6 @@ export default function AdminUsers() {
             <thead>
               <tr className="bg-muted text-left">
                 <th className="p-3">Email</th>
-                <th className="p-3">Reset Password</th>
                 <th className="p-3">Actions</th>
               </tr>
             </thead>
@@ -141,28 +138,65 @@ export default function AdminUsers() {
                 <tr key={u.id} className="border-t">
                   <td className="p-3">{u.email}</td>
 
-                  <td className="p-3 text-right">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        toast("Reset Password clicked");
-                        resetPassword(u.id);
-                      }}
-                      className="bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white px-3 py-1.5 rounded border border-blue-200 transition-colors text-sm font-medium mr-3 relative z-50 cursor-pointer"
-                    >
-                      Reset Password
-                    </button>
-                    
-                    <button
-                      type="button"
-                      onClick={() => {
-                        toast("Delete clicked");
-                        deleteUser(u.id);
-                      }}
-                      className="bg-red-50 text-red-600 hover:bg-red-600 hover:text-white px-3 py-1.5 rounded border border-red-200 transition-colors text-sm font-medium relative z-50 cursor-pointer"
-                    >
-                      Delete
-                    </button>
+                  <td className="p-3 flex items-center gap-2">
+                    {resetingId === u.id ? (
+                      <div className="flex gap-2">
+                        <input
+                          autoFocus
+                          type="text"
+                          placeholder="New password"
+                          className="px-2 py-1 border rounded text-sm w-32"
+                          value={newPassword}
+                          onChange={(e) => setNewPassword(e.target.value)}
+                        />
+                        <button
+                          onClick={() => resetPassword(u.id)}
+                          className="bg-blue-600 text-white px-2 py-1 rounded text-xs font-bold"
+                        >
+                          Save
+                        </button>
+                        <button
+                          onClick={() => {
+                            setResetingId(null);
+                            setNewPassword("");
+                          }}
+                          className="bg-muted px-2 py-1 rounded text-xs"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    ) : confirmingDeleteId === u.id ? (
+                      <div className="flex gap-2">
+                         <button
+                          onClick={() => deleteUser(u.id)}
+                          className="bg-red-600 text-white px-3 py-1 rounded text-sm font-bold animate-pulse"
+                        >
+                          Confirm?
+                        </button>
+                        <button
+                          onClick={() => setConfirmingDeleteId(null)}
+                          className="bg-muted px-3 py-1 rounded text-sm"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    ) : (
+                      <>
+                        <button
+                          onClick={() => setResetingId(u.id)}
+                          className="bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white px-3 py-1.5 rounded border border-blue-200 transition-colors text-sm font-medium"
+                        >
+                          Reset Password
+                        </button>
+                        
+                        <button
+                          onClick={() => setConfirmingDeleteId(u.id)}
+                          className="bg-red-50 text-red-600 hover:bg-red-600 hover:text-white px-3 py-1.5 rounded border border-red-200 transition-colors text-sm font-medium"
+                        >
+                          Delete
+                        </button>
+                      </>
+                    )}
                   </td>
                 </tr>
               ))}

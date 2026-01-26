@@ -17,20 +17,11 @@ export default function AdminDestinations() {
     setDestinations(data || []);
   }
 
+  const [confirmingId, setConfirmingId] = useState<string | null>(null);
+
   async function handleDelete(id: string) {
     try {
-      console.log("handleDelete initiated for:", id);
-      
-      const confirmed = window.confirm(
-        "Are you sure you want to delete this destination? This action cannot be undone."
-      );
-
-      if (!confirmed) {
-        toast("Delete cancelled by user");
-        return;
-      }
-
-      toast("Database request sent...");
+      toast("Deleting...");
       setLoading(true);
 
       const { error } = await supabase
@@ -39,17 +30,16 @@ export default function AdminDestinations() {
         .eq("id", id);
 
       if (error) {
-        toast.error("Failed to delete destination: " + error.message);
-        console.error(error);
+        toast.error("Failed to delete: " + error.message);
       } else {
-        toast.success("Destination deleted successfully");
+        toast.success("Deleted successfully");
         setDestinations((prev) => prev.filter((d) => d.id !== id));
       }
     } catch (err: any) {
-      console.error("Critical error in handleDelete:", err);
-      toast.error("System Error: " + err.message);
+      toast.error("Error: " + err.message);
     } finally {
       setLoading(false);
+      setConfirmingId(null);
     }
   }
 
@@ -71,7 +61,6 @@ export default function AdminDestinations() {
               key={d.id}
               className="p-4 bg-card shadow rounded flex justify-between items-start"
             >
-              {/* EDIT LINK */}
               <Link
                 to={`/admin/destinations/edit/${d.id}`}
                 className="flex-1"
@@ -82,18 +71,31 @@ export default function AdminDestinations() {
                 </p>
               </Link>
 
-              <div className="ml-4 flex items-center h-full relative z-50">
-                <button
-                  type="button"
-                  onClick={() => {
-                    toast("Delete button clicked");
-                    handleDelete(d.id);
-                  }}
-                  disabled={loading}
-                  className="bg-red-50 text-red-600 hover:bg-red-600 hover:text-white px-3 py-1.5 rounded border border-red-200 transition-colors text-sm font-medium cursor-pointer"
-                >
-                  Delete
-                </button>
+              <div className="ml-4 flex items-center h-full gap-2">
+                {confirmingId === d.id ? (
+                  <>
+                    <button
+                      onClick={() => handleDelete(d.id)}
+                      disabled={loading}
+                      className="bg-red-600 text-white px-3 py-1.5 rounded text-sm font-bold animate-pulse"
+                    >
+                      Confirm?
+                    </button>
+                    <button
+                      onClick={() => setConfirmingId(null)}
+                      className="bg-muted text-muted-foreground px-3 py-1.5 rounded text-sm"
+                    >
+                      Cancel
+                    </button>
+                  </>
+                ) : (
+                  <button
+                    onClick={() => setConfirmingId(d.id)}
+                    className="bg-red-50 text-red-600 hover:bg-red-600 hover:text-white px-3 py-1.5 rounded border border-red-200 transition-colors text-sm font-medium"
+                  >
+                    Delete
+                  </button>
+                )}
               </div>
             </div>
           ))}
