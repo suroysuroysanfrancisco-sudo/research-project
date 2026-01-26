@@ -1,3 +1,4 @@
+import React from "react";
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
 import { motion } from "framer-motion";
@@ -6,14 +7,20 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { MapPin, Phone, Mail } from "lucide-react";
-import { toast } from "sonner";
 import { Helmet } from "react-helmet-async";
 
+import { useForm, ValidationError } from "@formspree/react";
+import { toast } from "sonner";
+
 const Contact = () => {
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    toast.success("Message sent! We'll get back to you soon.");
-  };
+  // ✅ Replace with your Formspree Form ID
+  const [state, handleSubmit] = useForm("mzdrdqlo");
+
+  React.useEffect(() => {
+    if (state.succeeded) {
+      toast.success("Message sent! We'll get back to you soon.");
+    }
+  }, [state.succeeded]);
 
   const contactInfo = [
     {
@@ -35,9 +42,10 @@ const Contact = () => {
 
   return (
     <div className="min-h-screen bg-background">
-    <Helmet>
-      <title>Contact Us | San Francisco - Discover Paradise in Cebu</title>
-    </Helmet>
+      <Helmet>
+        <title>Contact Us | San Francisco - Discover Paradise in Cebu</title>
+      </Helmet>
+
       <Navigation />
 
       <div className="pt-32 pb-20 px-4">
@@ -57,6 +65,7 @@ const Contact = () => {
           </motion.div>
 
           <div className="grid md:grid-cols-2 gap-12">
+            {/* LEFT: FORM */}
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               animate={{ opacity: 1, x: 0 }}
@@ -66,56 +75,99 @@ const Contact = () => {
                 <h2 className="text-2xl font-bold font-playfair text-foreground mb-6">
                   Send us a Message
                 </h2>
+
+                {/* ✅ Formspree submit */}
                 <form onSubmit={handleSubmit} className="space-y-6">
+                  {/* Name */}
                   <div>
                     <Label htmlFor="name">Name</Label>
                     <Input
                       id="name"
+                      name="name"
                       placeholder="Your name"
                       required
                       className="mt-2"
                     />
+                    <ValidationError
+                      prefix="Name"
+                      field="name"
+                      errors={state.errors}
+                    />
                   </div>
+
+                  {/* Email */}
                   <div>
                     <Label htmlFor="email">Email</Label>
                     <Input
                       id="email"
+                      name="email"
                       type="email"
                       placeholder="your.email@example.com"
                       required
                       className="mt-2"
                     />
+                    <ValidationError
+                      prefix="Email"
+                      field="email"
+                      errors={state.errors}
+                    />
                   </div>
+
+                  {/* Subject */}
                   <div>
                     <Label htmlFor="subject">Subject</Label>
                     <Input
                       id="subject"
+                      name="subject"
                       placeholder="What's this about?"
                       required
                       className="mt-2"
                     />
+                    <ValidationError
+                      prefix="Subject"
+                      field="subject"
+                      errors={state.errors}
+                    />
                   </div>
+
+                  {/* Message */}
                   <div>
                     <Label htmlFor="message">Message</Label>
                     <Textarea
                       id="message"
+                      name="message"
                       placeholder="Tell us more..."
                       rows={6}
                       required
                       className="mt-2"
                     />
+                    <ValidationError
+                      prefix="Message"
+                      field="message"
+                      errors={state.errors}
+                    />
                   </div>
+
                   <Button
                     type="submit"
                     size="lg"
+                    disabled={state.submitting}
                     className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold"
                   >
-                    Send Message
+                    {state.submitting ? "Sending..." : "Send Message"}
                   </Button>
+
+                  {/* Optional message */}
+                  {state.succeeded && (
+                    <p className="text-sm text-muted-foreground text-center">
+                      Thanks! Your message has been sent.
+                    </p>
+                  )}
                 </form>
               </div>
             </motion.div>
 
+            {/* RIGHT: CONTACT INFO */}
             <motion.div
               initial={{ opacity: 0, x: 30 }}
               animate={{ opacity: 1, x: 0 }}
