@@ -150,12 +150,6 @@ const Contact = () => {
                   >
                     {state.submitting ? "Sending..." : "Send Message"}
                   </Button>
-
-                  {state.succeeded && (
-                    <p className="text-sm text-muted-foreground text-center">
-                      Thanks! Your message has been sent.
-                    </p>
-                  )}
                 </form>
               </div>
             </motion.div>
