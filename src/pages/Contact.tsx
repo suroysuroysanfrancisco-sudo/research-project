@@ -13,7 +13,6 @@ import { useForm, ValidationError } from "@formspree/react";
 import { toast } from "sonner";
 
 const Contact = () => {
-  // ✅ Replace with your Formspree Form ID
   const [state, handleSubmit] = useForm("mzdrdqlo");
 
   React.useEffect(() => {
@@ -76,9 +75,8 @@ const Contact = () => {
                   Send us a Message
                 </h2>
 
-                {/* ✅ Formspree submit */}
+                {/* ✅ FORM SUBMISSION GOES TO FORMSPREE */}
                 <form onSubmit={handleSubmit} className="space-y-6">
-                  {/* Name */}
                   <div>
                     <Label htmlFor="name">Name</Label>
                     <Input
@@ -88,14 +86,9 @@ const Contact = () => {
                       required
                       className="mt-2"
                     />
-                    <ValidationError
-                      prefix="Name"
-                      field="name"
-                      errors={state.errors}
-                    />
+                    <ValidationError prefix="Name" field="name" errors={state.errors} />
                   </div>
 
-                  {/* Email */}
                   <div>
                     <Label htmlFor="email">Email</Label>
                     <Input
@@ -106,14 +99,9 @@ const Contact = () => {
                       required
                       className="mt-2"
                     />
-                    <ValidationError
-                      prefix="Email"
-                      field="email"
-                      errors={state.errors}
-                    />
+                    <ValidationError prefix="Email" field="email" errors={state.errors} />
                   </div>
 
-                  {/* Subject */}
                   <div>
                     <Label htmlFor="subject">Subject</Label>
                     <Input
@@ -123,14 +111,9 @@ const Contact = () => {
                       required
                       className="mt-2"
                     />
-                    <ValidationError
-                      prefix="Subject"
-                      field="subject"
-                      errors={state.errors}
-                    />
+                    <ValidationError prefix="Subject" field="subject" errors={state.errors} />
                   </div>
 
-                  {/* Message */}
                   <div>
                     <Label htmlFor="message">Message</Label>
                     <Textarea
@@ -141,11 +124,7 @@ const Contact = () => {
                       required
                       className="mt-2"
                     />
-                    <ValidationError
-                      prefix="Message"
-                      field="message"
-                      errors={state.errors}
-                    />
+                    <ValidationError prefix="Message" field="message" errors={state.errors} />
                   </div>
 
                   <Button
@@ -157,7 +136,6 @@ const Contact = () => {
                     {state.submitting ? "Sending..." : "Send Message"}
                   </Button>
 
-                  {/* Optional message */}
                   {state.succeeded && (
                     <p className="text-sm text-muted-foreground text-center">
                       Thanks! Your message has been sent.
@@ -167,7 +145,7 @@ const Contact = () => {
               </div>
             </motion.div>
 
-            {/* RIGHT: CONTACT INFO */}
+            {/* RIGHT SIDE */}
             <motion.div
               initial={{ opacity: 0, x: 30 }}
               animate={{ opacity: 1, x: 0 }}
