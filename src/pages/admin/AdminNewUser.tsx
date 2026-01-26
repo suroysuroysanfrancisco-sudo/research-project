@@ -6,7 +6,7 @@ import { toast } from "sonner";
 export default function AdminNewUser() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState<"viewer" | "editor" | "admin">("admin");
+  const [role, setRole] = useState<"viewer" | "editor" | "admin">("editor");
   const [loading, setLoading] = useState(false);
 
   async function handleCreateUser(e: React.FormEvent) {
