@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import AdminLayout from "@/components/AdminLayout";
+import { toast } from "sonner";
 
 type Profile = {
   id: string;
@@ -31,6 +32,7 @@ export default function AdminUsers() {
   async function updateRole(id: string, role: string) {
     await supabase.from("profiles").update({ role }).eq("id", id);
     loadUsers();
+    toast.success("Role updated successfully");
   }
 
   async function deleteUser(id: string) {
@@ -39,7 +41,7 @@ export default function AdminUsers() {
     const { data } = await supabase.auth.getSession();
     if (!data.session) return;
 
-    await fetch(
+    const res = await fetch(
       `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/delete-user`,
       {
         method: "POST",
@@ -52,7 +54,15 @@ export default function AdminUsers() {
       }
     );
 
-    loadUsers();
+    if (!res.ok) {
+        const text = await res.text();
+        toast.error("Failed to delete user: " + text);
+        console.error("Delete user error:", text);
+    } else {
+        toast.success("User deleted successfully");
+        // remove from UI instantly
+        setUsers((prev) => prev.filter((u) => u.id !== id));
+    }
   }
 
   async function resetPassword(userId: string) {
@@ -80,9 +90,10 @@ export default function AdminUsers() {
 
     if (!res.ok) {
       const text = await res.text();
-      alert("Failed to reset password: " + text);
+      toast.error("Failed to reset password: " + text);
+      console.error("Reset password error:", text);
     } else {
-      alert("Password reset successfully");
+      toast.success("Password reset successfully");
     }
   }
 

@@ -4,6 +4,7 @@ import AdminLayout from "@/components/AdminLayout";
 import { uploadImage } from "@/lib/uploadImage";
 import { useParams } from "react-router-dom";
 import townMap from "@/assets/san-francisco.png";
+import { toast } from "sonner";
 
 export default function EditDestination() {
   const { id } = useParams();
@@ -23,6 +24,7 @@ export default function EditDestination() {
 
       if (error) {
         console.error(error);
+        toast.error("Failed to load destination");
         return;
       }
 
@@ -48,9 +50,10 @@ export default function EditDestination() {
         ...prev,
         image_url: url,
       }));
+      toast.success("Image uploaded successfully");
     } catch (err) {
       console.error(err);
-      alert("Image upload failed.");
+      toast.error("Image upload failed.");
     } finally {
       setUploading(false);
     }
@@ -71,8 +74,8 @@ export default function EditDestination() {
       })
       .eq("id", id);
 
-    if (error) alert(error.message);
-    else alert("Updated successfully!");
+    if (error) toast.error("Failed to update: " + error.message);
+    else toast.success("Updated successfully!");
   };
 
   const handleHotspotDrag = (e: any) => {

@@ -2,6 +2,7 @@ import { supabase } from "@/lib/supabaseClient";
 import AdminLayout from "@/components/AdminLayout";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { toast } from "sonner";
 
 export default function AdminDestinations() {
   const [destinations, setDestinations] = useState<any[]>([]);
@@ -31,9 +32,10 @@ export default function AdminDestinations() {
       .eq("id", id);
 
     if (error) {
-      alert("Failed to delete destination.");
+      toast.error("Failed to delete destination: " + error.message);
       console.error(error);
     } else {
+      toast.success("Destination deleted successfully");
       // remove from UI instantly
       setDestinations((prev) => prev.filter((d) => d.id !== id));
     }
