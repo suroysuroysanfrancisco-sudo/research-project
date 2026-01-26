@@ -16,10 +16,9 @@ const Contact = () => {
   const [state, handleSubmit] = useForm("mzdrdqlo");
 
   React.useEffect(() => {
-    if (state.succeeded) {
-      toast.success("Message sent! We'll get back to you soon.");
-    }
-  }, [state.succeeded]);
+    if (state.succeeded) toast.success("Message sent! We'll get back to you soon.");
+    if (state.errors?.length) toast.error("Failed to send message. Please try again.");
+  }, [state.succeeded, state.errors]);
 
   const contactInfo = [
     {
@@ -76,7 +75,14 @@ const Contact = () => {
                 </h2>
 
                 {/* ✅ FORM SUBMISSION GOES TO FORMSPREE */}
-                <form onSubmit={handleSubmit} className="space-y-6">
+                <form onSubmit={handleSubmit} method="POST" className="space-y-6">
+                  {/* optional: fixed email subject for inbox readability */}
+                  <input
+                    type="hidden"
+                    name="_subject"
+                    value="New message from Suroy-Suroy San Francisco Contact Form"
+                  />
+
                   <div>
                     <Label htmlFor="name">Name</Label>
                     <Input
@@ -93,13 +99,13 @@ const Contact = () => {
                     <Label htmlFor="email">Email</Label>
                     <Input
                       id="email"
-                      name="email"
+                      name="_replyto"
                       type="email"
                       placeholder="your.email@example.com"
                       required
                       className="mt-2"
                     />
-                    <ValidationError prefix="Email" field="email" errors={state.errors} />
+                    <ValidationError prefix="Email" field="_replyto" errors={state.errors} />
                   </div>
 
                   <div>
