@@ -72,15 +72,15 @@ export default function AdminDestinations() {
                 </p>
               </Link>
 
-              <div className="ml-4 flex items-center h-full">
+              <div className="ml-4 flex items-center h-full relative z-50">
                 <button
                   type="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
+                  onClick={() => {
+                    toast("Delete button clicked");
                     handleDelete(d.id);
                   }}
                   disabled={loading}
-                  className="bg-red-50 text-red-600 hover:bg-red-600 hover:text-white px-3 py-1.5 rounded border border-red-200 transition-colors text-sm font-medium"
+                  className="bg-red-50 text-red-600 hover:bg-red-600 hover:text-white px-3 py-1.5 rounded border border-red-200 transition-colors text-sm font-medium cursor-pointer"
                 >
                   Delete
                 </button>

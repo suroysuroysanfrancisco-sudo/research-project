@@ -123,27 +123,25 @@ export default function AdminUsers() {
                 <tr key={u.id} className="border-t">
                   <td className="p-3">{u.email}</td>
 
-                  <td className="p-3">
+                  <td className="p-3 text-right">
                     <button
                       type="button"
-                      onClick={(e) => {
-                        e.stopPropagation();
+                      onClick={() => {
+                        toast("Reset Password clicked");
                         resetPassword(u.id);
                       }}
-                      className="bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white px-3 py-1.5 rounded border border-blue-200 transition-colors text-sm font-medium mr-3"
+                      className="bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white px-3 py-1.5 rounded border border-blue-200 transition-colors text-sm font-medium mr-3 relative z-50 cursor-pointer"
                     >
                       Reset Password
                     </button>
-                  </td>
-
-                  <td className="p-3">
+                    
                     <button
                       type="button"
-                      onClick={(e) => {
-                        e.stopPropagation();
+                      onClick={() => {
+                        toast("Delete clicked");
                         deleteUser(u.id);
                       }}
-                      className="bg-red-50 text-red-600 hover:bg-red-600 hover:text-white px-3 py-1.5 rounded border border-red-200 transition-colors text-sm font-medium"
+                      className="bg-red-50 text-red-600 hover:bg-red-600 hover:text-white px-3 py-1.5 rounded border border-red-200 transition-colors text-sm font-medium relative z-50 cursor-pointer"
                     >
                       Delete
                     </button>

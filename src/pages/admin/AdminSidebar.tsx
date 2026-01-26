@@ -11,7 +11,7 @@ export default function AdminSidebar() {
     }`;
 
   return (
-    <div className="w-64 h-screen bg-card border-r shadow-lg fixed left-0 top-0 p-6">
+    <div className="w-64 h-screen bg-card border-r shadow-lg fixed left-0 top-0 p-6 z-[100]">
       <h1 className="text-2xl font-bold mb-6">Admin Panel</h1>
 
       <nav>
