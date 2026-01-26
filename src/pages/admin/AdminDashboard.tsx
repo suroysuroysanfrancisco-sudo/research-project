@@ -44,6 +44,16 @@ export default function AdminDashboard() {
         </Link>
 
         <Link
+          to="/admin/users"
+          className="p-6 bg-card shadow-medium rounded-lg border hover:shadow-lg transition"
+        >
+          <h2 className="text-xl font-semibold">Manage Admins</h2>
+          <p className="text-muted-foreground mt-2">
+            View, edit roles, and delete administrative users.
+          </p>
+        </Link>
+
+        <Link
           to="/admin/users/new"
           className="p-6 bg-card shadow-medium rounded-lg border hover:shadow-lg transition"
         >

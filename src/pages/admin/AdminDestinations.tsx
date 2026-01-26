@@ -72,14 +72,18 @@ export default function AdminDestinations() {
                 </p>
               </Link>
 
-              {/* DELETE BUTTON */}
-              <button
-                onClick={() => handleDelete(d.id)}
-                disabled={loading}
-                className="ml-4 text-sm text-red-600 hover:text-red-800 hover:underline"
-              >
-                Delete
-              </button>
+              <div className="ml-4 flex items-center h-full">
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleDelete(d.id);
+                  }}
+                  disabled={loading}
+                  className="bg-red-50 text-red-600 hover:bg-red-600 hover:text-white px-3 py-1.5 rounded border border-red-200 transition-colors text-sm font-medium"
+                >
+                  Delete
+                </button>
+              </div>
             </div>
           ))}
         </div>

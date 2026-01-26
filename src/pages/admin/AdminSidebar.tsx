@@ -20,7 +20,7 @@ export default function AdminSidebar() {
         <Link className={linkClass("/admin/destinations/new")} to="/admin/destinations/new">Add Destination</Link>
         <hr className="my-4 opacity-30" />
         <Link className={linkClass("/admin/users")} to="/admin/users">Manage Admins</Link>
-        <Link className={linkClass("/admin/new")} to="/admin/users/new">Register Admin</Link>
+        <Link className={linkClass("/admin/users/new")} to="/admin/users/new">Register Admin</Link>
       </nav>
     </div>
   );

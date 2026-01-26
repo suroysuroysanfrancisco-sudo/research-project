@@ -121,17 +121,16 @@ export default function AdminUsers() {
                   <td className="p-3">
                     <button
                       onClick={() => resetPassword(u.id)}
-                      className="text-blue-600 hover:underline mr-3"
+                      className="bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white px-3 py-1.5 rounded border border-blue-200 transition-colors text-sm font-medium mr-3"
                     >
                       Reset Password
                     </button>
-
                   </td>
 
                   <td className="p-3">
                     <button
                       onClick={() => deleteUser(u.id)}
-                      className="text-red-600 hover:underline"
+                      className="bg-red-50 text-red-600 hover:bg-red-600 hover:text-white px-3 py-1.5 rounded border border-red-200 transition-colors text-sm font-medium"
                     >
                       Delete
                     </button>
