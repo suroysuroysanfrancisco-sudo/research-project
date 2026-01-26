@@ -24,7 +24,7 @@ export default function AdminNewUser() {
 
     // 🚀 call Edge Function
     const res = await fetch(
-      "https://drjrfjoixsymruqsowfg.supabase.co/functions/v1/create-user",
+      `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/create-user`,
       {
         method: "POST",
         headers: {

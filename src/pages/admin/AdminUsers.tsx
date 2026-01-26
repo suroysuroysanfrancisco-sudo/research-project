@@ -40,7 +40,7 @@ export default function AdminUsers() {
     if (!data.session) return;
 
     await fetch(
-      "https://drjrfjoixsymruqsowfg.supabase.co/functions/v1/delete-user",
+      `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/delete-user`,
       {
         method: "POST",
         headers: {
@@ -63,7 +63,7 @@ export default function AdminUsers() {
     if (!data.session) return;
 
     const res = await fetch(
-      "https://drjrfjoixsymruqsowfg.supabase.co/functions/v1/reset-password",
+      `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/reset-password`,
       {
         method: "POST",
         headers: {
