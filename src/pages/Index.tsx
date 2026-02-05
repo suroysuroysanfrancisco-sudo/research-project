@@ -81,7 +81,7 @@ const Index = () => {
               className="bg-primary hover:text-foreground text-primary-foreground font-semibold text-lg px-8 py-6 shadow-large"
               onClick={() => document.getElementById("destinations")?.scrollIntoView({ behavior: "smooth" })}
             >
-              Explore Destinations
+              Explore Our Destinations
             </Button>
             <Button
               size="lg"
