@@ -58,7 +58,7 @@ const Index = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="text-5xl md:text-7xl font-bold font-playfair text-white mb-6"
+            className="text-5xl md:text-7xl font-bold font-playfair text-red mb-6"
           >
             Discover Paradise Island of Camotes
           </motion.h1>
