@@ -172,7 +172,7 @@ const Index = () => {
             className="text-center mb-16"
           >
             <h2 className="text-4xl md:text-5xl font-bold font-playfair text-foreground mb-4">
-              Featured the Destinations
+              Featured Destinations
             </h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
               Explore the most breathtaking locations San Francisco, Camotes has to offer
