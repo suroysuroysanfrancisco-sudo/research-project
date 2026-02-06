@@ -38,12 +38,12 @@ const Contact = () => {
     {
       icon: Phone,
       title: "Phone",
-      content: "+63 123 456 7890",
+      content: "+63 968 286 0905",
     },
     {
       icon: Mail,
       title: "Email",
-      content: "info@sanfrancisco.com",
+      content: "suroysuroysanfrancisco@gmail.com",
     },
   ];
 
