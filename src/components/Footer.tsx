@@ -9,7 +9,7 @@ export const Footer = () => {
           <div>
             <h3 className="text-xl font-bold font-playfair mb-4">San Francisco, Camotes</h3>
             <p className="text-white/90 leading-relaxed">
-              Discover the hidden paradise of the Philippines. Experience pristine beaches,
+              Discover the hidden paradise of the San Francisco Camotes Island Cebu, Philippines. Experience pristine beaches,
               crystal caves, and natural wonders through our immersive virtual tours.
             </p>
           </div>
