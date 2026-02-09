@@ -5,16 +5,22 @@ import { Helmet } from "react-helmet-async";
 import { fetchDestinations } from "@/data/destinations";
 import townMap from "@/assets/san-francisco.png";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const VirtualTours = () => {
   const [destinations, setDestinations] = useState<any[]>([]);
+  const [activeSpotId, setActiveSpotId] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchDestinations().then((data) => setDestinations(data));
   }, []);
 
+  // Close tooltip when clicking background
+  const handleBackgroundClick = () => setActiveSpotId(null);
+
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background" onClick={handleBackgroundClick}>
       <Helmet>
         <title>Virtual Tours | San Francisco - Discover Paradise in Cebu</title>
       </Helmet>
@@ -41,6 +47,7 @@ const VirtualTours = () => {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6, delay: 0.2 }}
             className="relative w-full max-w-4xl mx-auto"
+            onClick={(e) => e.stopPropagation()} // Prevent closing when clicking map area
           >
             <img
               src={townMap}
@@ -49,17 +56,52 @@ const VirtualTours = () => {
             />
             {destinations.map((spot) =>
               spot.hotspot?.top && spot.hotspot?.left ? (
-                <button
+                <div
                   key={spot.id}
-                  onClick={() => (window.location.href = `/destinations/${spot.id}`)}
-                  className="absolute bg-primary text-white px-3 py-1 rounded-full shadow-lg text-sm font-semibold hover:bg-primary/80 transition transform -translate-x-1/2 -translate-y-1/2"
+                  className="absolute transform -translate-x-1/2 -translate-y-1/2 group"
                   style={{
                     top: spot.hotspot.top,
                     left: spot.hotspot.left,
                   }}
                 >
-                  {spot.title}
-                </button>
+                  {/* Marker Circle */}
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (activeSpotId === spot.id) {
+                        navigate(`/destinations/${spot.id}`);
+                      } else {
+                        setActiveSpotId(spot.id);
+                      }
+                    }}
+                    className={`
+                      w-6 h-6 rounded-full border-2 border-white shadow-lg 
+                      transition-transform duration-300 ease-out flex items-center justify-center
+                      ${activeSpotId === spot.id ? "bg-primary scale-125 z-20" : "bg-primary hover:bg-primary/90 hover:scale-110 z-10"}
+                    `}
+                    aria-label={`View ${spot.title}`}
+                  >
+                    <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
+                  </button>
+
+                  {/* Tooltip (Visible on Hover OR Active) */}
+                  <div 
+                    className={`
+                      absolute bottom-full left-1/2 -translate-x-1/2 mb-3 px-3 py-1.5 
+                      bg-foreground/90 text-background text-sm font-medium rounded-lg 
+                      whitespace-nowrap shadow-xl cursor-pointer transition-all duration-200
+                      ${activeSpotId === spot.id ? "opacity-100 translate-y-0 visible z-30" : "opacity-0 translate-y-2 invisible group-hover:opacity-100 group-hover:translate-y-0 group-hover:visible group-hover:z-30"}
+                    `}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      navigate(`/destinations/${spot.id}`);
+                    }}
+                  >
+                    {spot.title}
+                    {/* Triangle Arrow */}
+                    <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-px border-4 border-transparent border-t-foreground/90" />
+                  </div>
+                </div>
               ) : null
             )}
           </motion.div>

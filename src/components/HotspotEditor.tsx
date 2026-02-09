@@ -66,15 +66,9 @@ export const HotspotEditor = ({
                     pitch: `${hotspot.position.pitch}deg` 
                   },
                   html: `
-                    <div class="hotspot-marker ${hotspot.type === "navigation" ? "hotspot-navigation" : "hotspot-info"}">
-                      <div class="hotspot-pulse"></div>
-                      <div class="hotspot-icon">
-                        ${
-                          hotspot.type === "navigation"
-                            ? '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>'
-                            : '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>'
-                        }
-                      </div>
+                    <div class="hotspot-marker ${hotspot.type === "navigation" ? "hotspot-navigation" : "hotspot-info"}" data-id="${hotspot.id}">
+                      <div class="hotspot-circle"></div>
+                      <div class="hotspot-label">${hotspot.tooltip || "New Hotspot"}</div>
                     </div>
                   `,
                   tooltip: hotspot.tooltip,
@@ -470,70 +464,51 @@ export const HotspotEditor = ({
       <style>{`
         .hotspot-marker {
           position: relative;
-          width: 50px;
-          height: 50px;
-          cursor: pointer;
-          transform: translate(-50%, -50%);
-        }
-
-        .hotspot-pulse {
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          width: 100%;
-          height: 100%;
-          border-radius: 50%;
-          transform: translate(-50%, -50%);
-          animation: pulse 2s ease-out infinite;
-        }
-
-        .hotspot-navigation .hotspot-pulse {
-          background: rgba(59, 130, 246, 0.3);
-        }
-
-        .hotspot-info .hotspot-pulse {
-          background: rgba(16, 185, 129, 0.3);
-        }
-
-        .hotspot-icon {
-          position: absolute;
-          top: 50%;
-          left: 50%;
           width: 40px;
           height: 40px;
-          border-radius: 50%;
+          cursor: pointer;
+          transform: translate(-50%, -50%);
+          z-index: 100;
           display: flex;
           align-items: center;
           justify-content: center;
-          transform: translate(-50%, -50%);
-          transition: all 0.3s ease;
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
         }
 
-        .hotspot-navigation .hotspot-icon {
-          background: linear-gradient(135deg, #3b82f6, #2563eb);
+        .hotspot-circle {
+          width: 20px;
+          height: 20px;
+          border-radius: 50%;
+          background: rgba(255, 255, 255, 0.9);
+          box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.3);
+          transition: transform 0.2s;
+        }
+
+        .hotspot-navigation .hotspot-circle {
+          background: #3b82f6;
+          box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.3);
+        }
+
+        .hotspot-info .hotspot-circle {
+          background: #10b981;
+          box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.3);
+        }
+
+        .hotspot-marker:hover .hotspot-circle {
+          transform: scale(1.2);
+        }
+
+        .hotspot-label {
+          position: absolute;
+          top: 30px;
+          left: 50%;
+          transform: translateX(-50%);
+          background: rgba(0, 0, 0, 0.8);
           color: white;
-        }
-
-        .hotspot-info .hotspot-icon {
-          background: linear-gradient(135deg, #10b981, #059669);
-          color: white;
-        }
-
-        .hotspot-marker:hover .hotspot-icon {
-          transform: translate(-50%, -50%) scale(1.2);
-          box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
-        }
-
-        @keyframes pulse {
-          0% {
-            transform: translate(-50%, -50%) scale(0.8);
-            opacity: 1;
-          }
-          100% {
-            transform: translate(-50%, -50%) scale(1.5);
-            opacity: 0;
-          }
+          padding: 4px 8px;
+          border-radius: 4px;
+          font-size: 12px;
+          white-space: nowrap;
+          pointer-events: none;
         }
       `}</style>
     </div>

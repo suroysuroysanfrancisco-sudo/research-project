@@ -67,18 +67,12 @@ export const Viewer360 = ({
                     pitch: `${hotspot.position.pitch}deg` 
                   },
                   html: `
-                    <div class="hotspot-marker ${hotspot.type === "navigation" ? "hotspot-navigation" : "hotspot-info"}">
-                      <div class="hotspot-pulse"></div>
-                      <div class="hotspot-icon">
-                        ${
-                          hotspot.type === "navigation"
-                            ? '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>'
-                            : '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>'
-                        }
-                      </div>
+                    <div class="hotspot-marker ${hotspot.type === "navigation" ? "hotspot-navigation" : "hotspot-info"}" data-id="${hotspot.id}">
+                      <div class="hotspot-circle"></div>
+                      <div class="hotspot-label">${hotspot.tooltip || hotspot.targetTitle || "View"}</div>
                     </div>
                   `,
-                  tooltip: hotspot.tooltip,
+                  tooltip: undefined, // We use custom label instead of default tooltip
                   data: hotspot,
                 })),
               },
@@ -89,20 +83,32 @@ export const Viewer360 = ({
         viewerRef.current = new Viewer(viewerConfig);
         console.log(`Viewer initialized with ${hotspots.length} hotspots`);
 
-        // Handle marker clicks if hotspots exist
+        // Handle marker clicks
         if (hotspots.length > 0) {
           const markersPlugin = viewerRef.current.getPlugin(MarkersPlugin);
           if (markersPlugin) {
             markersPlugin.addEventListener("select-marker", ({ marker }: any) => {
               const hotspot = marker.data as Hotspot;
-
-              if (hotspot.type === "navigation" && hotspot.targetImageUrl) {
-                // Navigate to new panorama
-                setCurrentImageUrl(hotspot.targetImageUrl);
-                setCurrentTitle(hotspot.targetTitle || "");
+              const markerEl = document.querySelector(`[data-id="${hotspot.id}"]`);
+              
+              // Mobile/Interaction Logic:
+              // 1. If label is not visible, show it (and don't navigate yet)
+              // 2. If label IS visible, navigate
+              
+              if (markerEl && !markerEl.classList.contains("visible-tooltip")) {
+                // Hide all other tooltips
+                document.querySelectorAll(".hotspot-marker").forEach(el => el.classList.remove("visible-tooltip"));
+                // Show this one
+                markerEl.classList.add("visible-tooltip");
+                return; // Stop navigation
               }
 
-              // Call custom callback if provided
+              // Proceed to navigation
+              if (hotspot.type === "navigation" && hotspot.targetPanoramaId) {
+                // ... (Navigation handled handled by onHotspotClick primarily, but we can do it here too)
+              }
+
+              // Call custom callback
               if (onHotspotClick) {
                 onHotspotClick(hotspot);
               }
@@ -132,72 +138,58 @@ export const Viewer360 = ({
       <style>{`
         .hotspot-marker {
           position: relative;
-          width: 50px;
-          height: 50px;
-          cursor: pointer;
-          transform: translate(-50%, -50%);
-          z-index: 100 !important; /* Force on top */
-          display: block !important;
-        }
-
-        .hotspot-pulse {
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          width: 100%;
-          height: 100%;
-          border-radius: 50%;
-          transform: translate(-50%, -50%);
-          animation: pulse 2s ease-out infinite;
-        }
-
-        .hotspot-navigation .hotspot-pulse {
-          background: rgba(59, 130, 246, 0.3);
-        }
-
-        .hotspot-info .hotspot-pulse {
-          background: rgba(16, 185, 129, 0.3);
-        }
-
-        .hotspot-icon {
-          position: absolute;
-          top: 50%;
-          left: 50%;
           width: 40px;
           height: 40px;
-          border-radius: 50%;
+          cursor: pointer;
+          z-index: 100 !important;
           display: flex;
           align-items: center;
           justify-content: center;
-          transform: translate(-50%, -50%);
-          transition: all 0.3s ease;
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
         }
 
-        .hotspot-navigation .hotspot-icon {
-          background: linear-gradient(135deg, #3b82f6, #2563eb);
+        .hotspot-circle {
+          width: 20px;
+          height: 20px;
+          border-radius: 50%;
+          background: rgba(255, 255, 255, 0.9);
+          box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.3);
+          transition: transform 0.2s;
+        }
+
+        .hotspot-navigation .hotspot-circle {
+          background: #3b82f6; /* Blue for nav */
+          box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.3);
+        }
+
+        .hotspot-info .hotspot-circle {
+          background: #10b981; /* Green for info */
+          box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.3);
+        }
+
+        .hotspot-marker:hover .hotspot-circle,
+        .hotspot-marker.visible-tooltip .hotspot-circle {
+          transform: scale(1.2);
+        }
+
+        .hotspot-label {
+          position: absolute;
+          top: 30px; /* Below the circle */
+          left: 50%;
+          transform: translateX(-50%);
+          background: rgba(0, 0, 0, 0.8);
           color: white;
+          padding: 4px 8px;
+          border-radius: 4px;
+          font-size: 12px;
+          white-space: nowrap;
+          pointer-events: none;
+          opacity: 0;
+          transition: opacity 0.2s;
         }
 
-        .hotspot-info .hotspot-icon {
-          background: linear-gradient(135deg, #10b981, #059669);
-          color: white;
-        }
-
-        .hotspot-marker:hover .hotspot-icon {
-          transform: translate(-50%, -50%) scale(1.2);
-          box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
-        }
-
-        @keyframes pulse {
-          0% {
-            transform: translate(-50%, -50%) scale(0.8);
-            opacity: 1;
-          }
-          100% {
-            transform: translate(-50%, -50%) scale(1.5);
-            opacity: 0;
-          }
+        .hotspot-marker:hover .hotspot-label,
+        .hotspot-marker.visible-tooltip .hotspot-label {
+          opacity: 1;
         }
 
         /* Tooltip styling */
