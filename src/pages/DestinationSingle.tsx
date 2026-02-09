@@ -1,11 +1,11 @@
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
 import { PanoramaViewer } from "@/components/PanoramaViewer";
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { Helmet } from "react-helmet-async";
 import { supabase } from "@/lib/supabase";
 import { useParams, Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import {
   MapPin,
   Clock,
@@ -17,6 +17,27 @@ import {
 import { RatingDisplay } from "@/components/RatingDisplay";
 import { ReviewForm, ReviewData } from "@/components/ReviewForm";
 import { ReviewsList, Review } from "@/components/ReviewsList";
+
+const ParallaxImage = ({ src, alt }: { src: string; alt: string }) => {
+  const ref = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"],
+  });
+  const y = useTransform(scrollYProgress, [0, 1], ["-20%", "20%"]);
+
+  return (
+    <div ref={ref} className="relative h-full min-h-[500px] rounded-xl overflow-hidden shadow-sm group">
+      <motion.div style={{ y }} className="absolute inset-0 w-full h-[140%] -top-[20%]">
+        <img
+          src={src}
+          alt={alt}
+          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+        />
+      </motion.div>
+    </div>
+  );
+};
 
 const DestinationSingle = () => {
   const { id } = useParams();
@@ -144,29 +165,21 @@ const DestinationSingle = () => {
           {/* LEFT CONTENT */}
           <div className="lg:col-span-2 space-y-10">
 
-            {/* ABOUT */}
-            <div className="bg-card rounded-xl p-8 shadow-sm">
-              <h2 className="text-2xl font-semibold mb-4">
-                About This Destination
-              </h2>
-              <p className="text-muted-foreground leading-relaxed">
-                {data.long_description}
-              </p>
-            </div>
-
-            {/* HIGHLIGHTS 
-            <div className="bg-card rounded-xl p-8 shadow-sm">
-              <h3 className="text-xl font-semibold mb-6">Highlights</h3>
-              <div className="grid sm:grid-cols-2 gap-4">
-                {(data.highlights || []).map((item: string, i: number) => (
-                  <div key={i} className="flex items-start gap-2">
-                    <CheckCircle className="w-5 h-5 text-primary mt-1" />
-                    <span className="text-sm text-muted-foreground">{item}</span>
-                  </div>
-                ))}
+            {/* ABOUT & PARALLAX IMAGE GRID */}
+            <div className="grid md:grid-cols-2 gap-8 items-stretch">
+              <div className="bg-card rounded-xl p-8 shadow-sm flex flex-col">
+                <h2 className="text-2xl font-semibold mb-4">
+                  About This Destination
+                </h2>
+                <p className="text-muted-foreground leading-relaxed">
+                  {data.long_description}
+                </p>
               </div>
+
+              {/* Parallax Image (Replacing Highlights) */}
+              <ParallaxImage src={data.thumbnail_url || data.image_url} alt={data.title} />
             </div>
-            */}
+            
             {/* TRAVELER TIPS */}
             <div className="bg-primary/5 border border-primary/10 rounded-xl p-8">
               <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
