@@ -12,27 +12,52 @@ import lakeDanao from "@/assets/lake-danao.jpg";
 import { Helmet } from "react-helmet-async";
 import { MapPin, Users, Camera } from "lucide-react";
 
+import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabaseClient";
+
+interface Destination {
+  id: string;
+  title: string;
+  description: string;
+  image_url: string;
+}
+
 const Index = () => {
-  const destinations = [
-    {
-      title: "Santiago Bay",
-      description: "Pristine white sand beach with crystal-clear turquoise waters, perfect for swimming and relaxation.",
-      image: santiagoBay,
-      link: "/destinations/santiago-bay",
-    },
-    {
-      title: "Timubo Cave",
-      description: "A mystical cave with a natural lagoon inside, featuring stunning stalactites and crystal-clear waters.",
-      image: timboCave,
-      link: "/destinations/timubo-cave",
-    },
-    {
-      title: "Lake Danao",
-      description: "A serene guitar-shaped lake surrounded by lush forest, offering kayaking and peaceful nature walks.",
-      image: lakeDanao,
-      link: "/destinations/lake-danao",
-    },
-  ];
+  const [destinations, setDestinations] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchDestinations();
+  }, []);
+
+  const fetchDestinations = async () => {
+    try {
+      // Simple fetch without ordering to match Destinations page
+      const { data, error } = await supabase
+        .from("destinations")
+        .select("*")
+        .limit(3);
+
+      if (error) {
+        console.error("Supabase error:", error);
+        return;
+      }
+
+      if (data) {
+        console.log("Fetched destinations:", data);
+        setDestinations(data.map(d => ({
+          ...d,
+          description: d.short_description || d.description,
+          image: d.image_url,
+          link: `/destinations/${d.id}`
+        })));
+      }
+    } catch (error) {
+      console.error("Error fetching destinations:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -180,13 +205,22 @@ const Index = () => {
           </motion.div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {destinations.map((destination, index) => (
-              <DestinationCard
-                key={destination.title}
-                {...destination}
-                delay={index * 0.2}
-              />
-            ))}
+            {destinations.length > 0 ? (
+              destinations.map((destination, index) => (
+                <DestinationCard
+                  key={destination.id || index}
+                  {...destination}
+                  delay={index * 0.2}
+                />
+              ))
+            ) : (
+              !loading && (
+                <div className="col-span-full text-center py-12 text-muted-foreground">
+                  <p className="text-xl">No featured destinations yet.</p>
+                  <p className="text-sm mt-2">Check back soon for new places to explore!</p>
+                </div>
+              )
+            )}
           </div>
         </div>
       </section>
