@@ -57,7 +57,7 @@ const Destinations = () => {
                   key={item.id}
                   title={item.title}
                   description={item.short_description}
-                  image={item.image_url} // image now comes from supabase storage
+                  image={item.thumbnail_url || item.image_url} // Use thumbnail if available
                   link={`/destinations/${item.id}`}
                   delay={index * 0.15}
                 />

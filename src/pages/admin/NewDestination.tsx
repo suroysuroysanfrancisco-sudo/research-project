@@ -26,11 +26,28 @@ export default function NewDestination() {
     hotspot_top: "50%",
     hotspot_left: "50%",
     image_url: "",
+    thumbnail_url: "",
   });
 
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
   const mapRef = useRef<HTMLDivElement | null>(null);
+
+  const handleThumbnailUpload = async (e: any) => {
+    try {
+      const file = e.target.files?.[0];
+      if (!file) return;
+      
+      setUploading(true);
+      const url = await uploadImage(file);
+      setForm((prev: any) => ({ ...prev, thumbnail_url: url }));
+      toast.success("Thumbnail uploaded!");
+    } catch (err: any) {
+      toast.error("Upload failed");
+    } finally {
+      setUploading(false);
+    }
+  };
 
   const handleHotspotDrag = (e: any) => {
     if (!mapRef.current) return;
@@ -78,8 +95,9 @@ export default function NewDestination() {
       return;
     }
 
-    if (!form.image_url) {
-      toast.error("Please upload an image first.");
+    // Allow saving if at least ONE image is provided, preferably thumbnail
+    if (!form.image_url && !form.thumbnail_url) {
+      toast.error("Please upload at least a cover image or 360 image.");
       return;
     }
 
@@ -99,6 +117,7 @@ export default function NewDestination() {
           hotspot_top: form.hotspot_top,
           hotspot_left: form.hotspot_left,
           image_url: form.image_url,
+          thumbnail_url: form.thumbnail_url,
         },
       ]);
 
@@ -141,20 +160,37 @@ export default function NewDestination() {
         </div>
       </div>
 
-      <label className="block mb-2 font-semibold">Destination Image</label>
-      <input type="file" accept="image/*" onChange={handleImageUpload} />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+        <div className="p-6 border rounded-lg bg-card">
+          <label className="block mb-2 font-bold text-lg">Cover Image (Thumbnail)</label>
+          <p className="text-sm text-muted-foreground mb-4">
+            Displayed on homepage and cards. Standard 2D photo.
+          </p>
+          <input type="file" accept="image/*" onChange={handleThumbnailUpload} />
+          {form.thumbnail_url && (
+            <img
+              src={form.thumbnail_url}
+              className="w-full h-48 object-cover rounded-lg shadow mt-4"
+              alt="Thumbnail Preview"
+            />
+          )}
+        </div>
 
-      {uploading && (
-        <p className="text-sm text-muted-foreground mt-2">Uploading...</p>
-      )}
-
-      {form.image_url && (
-        <img
-          src={form.image_url}
-          alt="preview"
-          className="w-48 rounded shadow mt-4"
-        />
-      )}
+        <div className="p-6 border rounded-lg bg-card">
+           <label className="block mb-2 font-bold text-lg">Legacy 360° Image</label>
+           <p className="text-sm text-muted-foreground mb-4">
+             Fallback panorama.
+           </p>
+           <input type="file" accept="image/*" onChange={handleImageUpload} />
+           {form.image_url && (
+             <img
+               src={form.image_url}
+               alt="preview"
+               className="w-full h-48 rounded shadow mt-4"
+             />
+           )}
+        </div>
+      </div>
 
       <label className="block mt-6 mb-2 font-semibold">Generated ID</label>
       <input

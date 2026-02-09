@@ -48,7 +48,7 @@ const Index = () => {
         setDestinations(data.map(d => ({
           ...d,
           description: d.short_description || d.description,
-          image: d.image_url,
+          image: d.thumbnail_url || d.image_url, // Use thumbnail if available, else fallback
           link: `/destinations/${d.id}`
         })));
       }

@@ -44,12 +44,22 @@ export const HotspotEditor = ({
         };
 
         // Add markers plugin if hotspots exist
-        if (hotspots.length > 0) {
+        // Filter hotspots for CURRENT image only
+        const currentPano = panoramas.find(p => p.url === imageUrl);
+        const currentPanoId = currentPano?.id;
+
+        const visibleHotspots = hotspots.filter(h => {
+             if (h.panoramaId) return h.panoramaId === currentPanoId;
+             // If legacy (no ID), show it? Yes, for now so they don't disappear in editor
+             return true; 
+        });
+
+        if (visibleHotspots.length > 0) {
           viewerConfig.plugins = [
             [
               MarkersPlugin,
               {
-                markers: hotspots.map((hotspot) => ({
+                markers: visibleHotspots.map((hotspot) => ({
                   id: hotspot.id,
                   position: { 
                     yaw: `${hotspot.position.yaw}deg`, 
@@ -87,10 +97,15 @@ export const HotspotEditor = ({
             const pitch = Math.round((e.data.pitch * 180) / Math.PI);
             
             console.log("Adding hotspot at:", { yaw, pitch });
+
+            // Find current panorama ID
+            const currentPano = panoramas.find(p => p.url === imageUrl);
+            const panoramaId = currentPano?.id;
             
             setTempPosition({ yaw, pitch });
             setEditingHotspot({
               id: `hotspot-${Date.now()}`,
+              panoramaId: panoramaId, // Save the ID of the current panorama
               position: { yaw, pitch },
               tooltip: "",
               type: "navigation",
@@ -126,6 +141,7 @@ export const HotspotEditor = ({
     const existingIndex = hotspots.findIndex((h) => h.id === editingHotspot.id);
     let newHotspots: Hotspot[];
 
+    // 1. Save the current hotspot
     if (existingIndex >= 0) {
       // Update existing
       newHotspots = [...hotspots];
@@ -133,6 +149,39 @@ export const HotspotEditor = ({
     } else {
       // Add new
       newHotspots = [...hotspots, editingHotspot];
+    }
+
+    // 2. Optimization: Auto-create return hotspot if it's a navigation type
+    if (
+      editingHotspot.type === "navigation" && 
+      editingHotspot.targetPanoramaId && 
+      editingHotspot.panoramaId // Ensure we know where we are coming FROM
+    ) {
+      const targetPanoId = editingHotspot.targetPanoramaId;
+      const currentPanoId = editingHotspot.panoramaId;
+      
+      // Check if a return hotspot already exists on the target panorama pointing back to current
+      const hasReturn = newHotspots.some(
+        h => h.panoramaId === targetPanoId && h.targetPanoramaId === currentPanoId
+      );
+
+      if (!hasReturn) {
+        // Create return hotspot
+        const currentPanoName = panoramas.find(p => p.id === currentPanoId)?.name || "Previous Area";
+        
+        const returnHotspot: Hotspot = {
+          id: `hotspot-${Date.now()}-return`,
+          panoramaId: targetPanoId, // Place it on the TARGET panorama
+          targetPanoramaId: currentPanoId, // Point it back to CURRENT panorama
+          type: "navigation",
+          tooltip: `Return to ${currentPanoName}`,
+          position: { yaw: 0, pitch: -10 }, // Default position (user must adjust)
+          targetTitle: currentPanoName
+        };
+
+        newHotspots.push(returnHotspot);
+        alert(`A return hotspot to "${currentPanoName}" has been created on the target panorama. Please switch to that panorama to position it correctly.`);
+      }
     }
 
     onChange(newHotspots);

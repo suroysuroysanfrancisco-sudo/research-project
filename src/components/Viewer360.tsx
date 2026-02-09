@@ -6,6 +6,7 @@ import "@photo-sphere-viewer/markers-plugin/index.css";
 
 export interface Hotspot {
   id: string;
+  panoramaId?: string; // ID of the panorama this hotspot belongs to
   position: { yaw: number; pitch: number }; // Position in degrees
   tooltip: string; // Hover text
   type: "navigation" | "info"; // Navigation changes panorama, info shows details
@@ -135,6 +136,8 @@ export const Viewer360 = ({
           height: 50px;
           cursor: pointer;
           transform: translate(-50%, -50%);
+          z-index: 100 !important; /* Force on top */
+          display: block !important;
         }
 
         .hotspot-pulse {

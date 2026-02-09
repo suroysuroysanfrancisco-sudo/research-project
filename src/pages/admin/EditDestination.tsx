@@ -46,6 +46,27 @@ export default function EditDestination() {
 
   if (loading || !form) return <p className="p-10 text-lg">Loading...</p>;
 
+  const handleThumbnailUpload = async (e: any) => {
+    try {
+      const file = e.target.files?.[0];
+      if (!file) return;
+
+      setUploading(true);
+      const url = await uploadImage(file);
+
+      setForm((prev: any) => ({
+        ...prev,
+        thumbnail_url: url,
+      }));
+      toast.success("Thumbnail uploaded successfully");
+    } catch (err) {
+      console.error(err);
+      toast.error("Thumbnail upload failed.");
+    } finally {
+      setUploading(false);
+    }
+  };
+
   const handleImageUpload = async (e: any) => {
     try {
       const file = e.target.files?.[0];
@@ -80,8 +101,9 @@ export default function EditDestination() {
         hotspot_top: form.hotspot_top,
         hotspot_left: form.hotspot_left,
         image_url: form.image_url,
-        hotspots: hotspots, // Save hotspots to database
-        panorama_images: panoramas, // Save panoramas to database
+        thumbnail_url: form.thumbnail_url, // Save thumbnail
+        hotspots: hotspots,
+        panorama_images: panoramas,
       })
       .eq("id", id);
 
@@ -107,7 +129,7 @@ export default function EditDestination() {
   };
 
   return (
-         <AdminLayout>
+          <AdminLayout>
     <div className="p-10 max-w-6xl mx-auto">
       <h1 className="text-3xl font-bold mb-6">Edit Destination</h1>
 
@@ -131,20 +153,37 @@ export default function EditDestination() {
         </div>
       </div>
 
-      <label className="block mb-2 font-semibold">Destination Image</label>
-      <input type="file" accept="image/*" onChange={handleImageUpload} />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+        <div className="p-6 border rounded-lg bg-card">
+          <label className="block mb-2 font-bold text-lg">Cover Image (Thumbnail)</label>
+          <p className="text-sm text-muted-foreground mb-4">
+            Displayed on destination cards and headers. Should be a standard 2D photo.
+          </p>
+          <input type="file" accept="image/*" onChange={handleThumbnailUpload} />
+          {form.thumbnail_url && (
+            <img
+              src={form.thumbnail_url}
+              className="w-full h-48 object-cover rounded-lg shadow mt-4"
+              alt="Thumbnail Preview"
+            />
+          )}
+        </div>
 
-      {uploading && (
-        <p className="text-sm text-muted-foreground">Uploading...</p>
-      )}
-
-      {form.image_url && (
-        <img
-          src={form.image_url}
-          className="w-48 rounded-lg shadow mt-4"
-          alt="Preview"
-        />
-      )}
+        <div className="p-6 border rounded-lg bg-card">
+          <label className="block mb-2 font-bold text-lg">Legacy 360° Image</label>
+           <p className="text-sm text-muted-foreground mb-4">
+            Fallback panorama if no gallery images are added.
+          </p>
+          <input type="file" accept="image/*" onChange={handleImageUpload} />
+          {form.image_url && (
+            <img
+              src={form.image_url}
+              className="w-full h-48 object-cover rounded-lg shadow mt-4"
+              alt="Panorama Preview"
+            />
+          )}
+        </div>
+      </div>
 
       <label className="block mt-6 mb-2 font-semibold">Destination ID</label>
       <input

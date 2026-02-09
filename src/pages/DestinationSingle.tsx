@@ -37,7 +37,11 @@ const DestinationSingle = () => {
       .eq("id", id)
       .single();
 
-    if (!error) setData(data);
+    if (!error) {
+      console.log("Loaded destination data:", data);
+      console.log("Hotspots count:", data.hotspots?.length || 0);
+      setData(data);
+    }
     setLoading(false);
     
     // Load reviews
@@ -91,7 +95,7 @@ const DestinationSingle = () => {
       <section className="relative pt-40 pb-32 overflow-hidden">
         <div
           className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: `url(${data.cover_image || data.image_url})` }}
+          style={{ backgroundImage: `url(${data.thumbnail_url || data.image_url})` }}
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-background" />
 

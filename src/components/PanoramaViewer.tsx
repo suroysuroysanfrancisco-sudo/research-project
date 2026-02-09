@@ -21,13 +21,29 @@ export const PanoramaViewer = ({
 
   const currentPanorama = panoramas.find((p) => p.id === currentPanoramaId);
   const currentHotspots = hotspots.filter(
-    (h) => h.position // Filter hotspots for current panorama if needed
+    (h) => {
+      // If hotspot has a panoramaId, strict match
+      if (h.panoramaId) {
+        return h.panoramaId === currentPanoramaId;
+      }
+      // Legacy compatibility: If no panoramaId, show on the FIRST/Default panorama only?
+      // Or show on all? showing on all is confusing.
+      // Let's assume legacy hotspots belong to the default panorama.
+      const isDefaultPano = currentPanoramaId === defaultPanorama?.id;
+      return isDefaultPano;
+    }
   );
 
   const handleHotspotClick = (hotspot: Hotspot) => {
+    console.log("Handling hotspot click:", hotspot);
     if (hotspot.type === "navigation") {
       const targetId = hotspot.targetPanoramaId;
-      if (targetId && panoramas.find((p) => p.id === targetId)) {
+      console.log("Target ID:", targetId);
+      
+      const targetPanoById = panoramas.find((p) => p.id === targetId);
+      console.log("Target Panorama found:", targetPanoById);
+
+      if (targetId && targetPanoById) {
         // Add current to history before navigating
         setHistory((prev) => [...prev, currentPanoramaId!]);
         setCurrentPanoramaId(targetId);
