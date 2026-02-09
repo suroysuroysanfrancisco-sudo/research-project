@@ -1,6 +1,6 @@
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
-import { Viewer360 } from "@/components/Viewer360";
+import { PanoramaViewer } from "@/components/PanoramaViewer";
 import { motion } from "framer-motion";
 import { Helmet } from "react-helmet-async";
 import { supabase } from "@/lib/supabase";
@@ -12,12 +12,19 @@ import {
   Star,
   CheckCircle,
   Info,
+  MessageSquare,
 } from "lucide-react";
+import { RatingDisplay } from "@/components/RatingDisplay";
+import { ReviewForm, ReviewData } from "@/components/ReviewForm";
+import { ReviewsList, Review } from "@/components/ReviewsList";
 
 const DestinationSingle = () => {
   const { id } = useParams();
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [reviews, setReviews] = useState<Review[]>([]);
+  const [avgRating, setAvgRating] = useState(0);
+  const [showReviewForm, setShowReviewForm] = useState(false);
 
   useEffect(() => {
     loadData();
@@ -32,6 +39,41 @@ const DestinationSingle = () => {
 
     if (!error) setData(data);
     setLoading(false);
+    
+    // Load reviews
+    loadReviews();
+  };
+
+  const loadReviews = async () => {
+    const { data: reviewsData } = await supabase
+      .from("destination_reviews")
+      .select("*")
+      .eq("destination_id", id)
+      .eq("is_approved", true)
+      .order("created_at", { ascending: false });
+
+    if (reviewsData && reviewsData.length > 0) {
+      setReviews(reviewsData);
+      // Calculate average rating
+      const avg = reviewsData.reduce((sum, r) => sum + r.rating, 0) / reviewsData.length;
+      setAvgRating(avg);
+    }
+  };
+
+  const handleSubmitReview = async (reviewData: ReviewData) => {
+    const { error } = await supabase
+      .from("destination_reviews")
+      .insert({
+        destination_id: id,
+        ...reviewData,
+        is_approved: true,
+      });
+
+    if (!error) {
+      loadReviews(); // Refresh reviews
+    } else {
+      throw error;
+    }
   };
 
   if (loading) return <div className="pt-40 text-center">Loading...</div>;
@@ -75,9 +117,12 @@ const DestinationSingle = () => {
 
           {/* META CHIPS */}
           <div className="flex flex-wrap gap-3">
-            <span className="inline-flex items-center gap-1 bg-white/90 text-sm px-3 py-1 rounded-full">
-              <Star className="w-4 h-4 text-yellow-500" /> 4.7 Rating
-            </span>
+            {reviews.length > 0 && (
+              <span className="inline-flex items-center gap-1 bg-white/90 text-sm px-3 py-1 rounded-full">
+                <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
+                {avgRating.toFixed(1)} ({reviews.length} {reviews.length === 1 ? 'review' : 'reviews'})
+              </span>
+            )}
             <span className="inline-flex items-center gap-1 bg-white/90 text-sm px-3 py-1 rounded-full">
               <Clock className="w-4 h-4 text-primary" /> 2–3 hours
             </span>
@@ -136,8 +181,56 @@ const DestinationSingle = () => {
             <div>
               <h3 className="text-2xl font-semibold mb-4">Virtual Tour</h3>
               <div className="rounded-xl overflow-hidden shadow-md">
-                <Viewer360 imageUrl={data.image_url} title={data.title} />
+                {data.panorama_images && data.panorama_images.length > 0 ? (
+                  <PanoramaViewer
+                    panoramas={data.panorama_images}
+                    hotspots={data.hotspots || []}
+                  />
+                ) : data.image_url ? (
+                  <PanoramaViewer
+                    panoramas={[{
+                      id: 'default',
+                      name: data.title,
+                      url: data.image_url,
+                      isDefault: true,
+                      order: 0
+                    }]}
+                    hotspots={data.hotspots || []}
+                  />
+                ) : (
+                  <div className="w-full h-[70vh] bg-muted rounded-lg flex items-center justify-center text-muted-foreground">
+                    No 360° panorama available
+                  </div>
+                )}
               </div>
+            </div>
+            
+            {/* REVIEWS & RATINGS */}
+            <div className="bg-card rounded-xl p-8 shadow-sm mt-10">
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-2xl font-semibold flex items-center gap-2">
+                  <MessageSquare className="w-6 h-6 text-primary" />
+                  Reviews & Ratings
+                </h3>
+                <button
+                  onClick={() => setShowReviewForm(true)}
+                  className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors"
+                >
+                  Write a Review
+                </button>
+              </div>
+
+              {reviews.length > 0 && (
+                <div className="mb-8">
+                  <RatingDisplay
+                    rating={avgRating}
+                    reviewCount={reviews.length}
+                    size="lg"
+                  />
+                </div>
+              )}
+
+              <ReviewsList reviews={reviews} />
             </div>
           </div>
 
@@ -178,6 +271,16 @@ const DestinationSingle = () => {
           </div>
         </div>
       </section>
+
+      {/* Review Form Modal */}
+      {showReviewForm && (
+        <ReviewForm
+          destinationId={id!}
+          destinationName={data.title}
+          onSubmit={handleSubmitReview}
+          onClose={() => setShowReviewForm(false)}
+        />
+      )}
 
       <Footer />
     </div>

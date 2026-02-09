@@ -5,12 +5,17 @@ import { uploadImage } from "@/lib/uploadImage";
 import { useParams } from "react-router-dom";
 import townMap from "@/assets/san-francisco.png";
 import { toast } from "sonner";
+import { HotspotEditor } from "@/components/HotspotEditor";
+import { Hotspot } from "@/components/Viewer360";
+import { PanoramaGalleryManager, PanoramaImage } from "@/components/PanoramaGalleryManager";
 
 export default function EditDestination() {
   const { id } = useParams();
   const [form, setForm] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
+  const [hotspots, setHotspots] = useState<Hotspot[]>([]);
+  const [panoramas, setPanoramas] = useState<PanoramaImage[]>([]);
 
   const mapRef = useRef<HTMLDivElement | null>(null);
 
@@ -29,6 +34,10 @@ export default function EditDestination() {
       }
 
       setForm(data);
+      // Load hotspots from database (parse JSONB)
+      setHotspots(data.hotspots || []);
+      // Load panoramas from database
+      setPanoramas(data.panorama_images || []);
       setLoading(false);
     }
 
@@ -71,6 +80,8 @@ export default function EditDestination() {
         hotspot_top: form.hotspot_top,
         hotspot_left: form.hotspot_left,
         image_url: form.image_url,
+        hotspots: hotspots, // Save hotspots to database
+        panorama_images: panoramas, // Save panoramas to database
       })
       .eq("id", id);
 
@@ -97,7 +108,7 @@ export default function EditDestination() {
 
   return (
          <AdminLayout>
-    <div className="p-10 max-w-4xl mx-auto">
+    <div className="p-10 max-w-6xl mx-auto">
       <h1 className="text-3xl font-bold mb-6">Edit Destination</h1>
 
       <div
@@ -208,8 +219,45 @@ export default function EditDestination() {
         onChange={(e) => setForm({ ...form, hotspot_left: e.target.value })}
       />
 
+      {/* 360° Panorama Gallery Section */}
+      <div className="mt-10 pt-10 border-t">
+        <PanoramaGalleryManager
+          images={panoramas}
+          onChange={setPanoramas}
+          onUpload={uploadImage}
+        />
+      </div>
+
+      {/* 360° Hotspots Section */}
+      <div className="mt-10 pt-10 border-t">
+        <h2 className="text-2xl font-bold mb-4">360° Virtual Tour Hotspots</h2>
+        <p className="text-muted-foreground mb-6">
+          Add interactive hotspots to your 360° panorama images. Click on the viewer
+          below to add navigation points or information markers.
+        </p>
+
+        {panoramas.length > 0 ? (
+          <HotspotEditor
+            imageUrl={panoramas.find(p => p.isDefault)?.url || panoramas[0]?.url}
+            hotspots={hotspots}
+            onChange={setHotspots}
+            panoramas={panoramas}
+          />
+        ) : form.image_url ? (
+          <HotspotEditor
+            imageUrl={form.image_url}
+            hotspots={hotspots}
+            onChange={setHotspots}
+          />
+        ) : (
+          <div className="p-8 bg-muted rounded-lg text-center text-muted-foreground">
+            Please upload panorama images in the gallery above to add hotspots.
+          </div>
+        )}
+      </div>
+
       <button
-        className="bg-primary text-white px-6 py-3 rounded mt-4 shadow-md"
+        className="bg-primary text-white px-6 py-3 rounded mt-8 shadow-md hover:bg-primary/90 transition-colors"
         onClick={update}
       >
         Save Changes
